@@ -1,0 +1,729 @@
+messages-prefix: "&b&lEnchants&9&l+&3&l > &b"
+
+# If joined player's language setting is not configured in languages/*.yml, use this language.
+default-language: en_us
+
+# Set this to false if You want to disable the particle effects server-wide.
+particles-enabled: true
+
+# Set this to false if You want to disable the sounds from the plugin.
+# This will auto-set to false inside the plugin if the server version is 1.8.
+sounds-enabled: true
+# If sounds are enabled, what should be their main volume? (Edit this value and keep testing until You're satisfied with it)
+sound-volume: 0.7
+
+# This basically disables all notification messages like 'You've poisoned the enemy!' no matter if player has /ep tn enabled or not.
+disable-notifications-globally: false
+
+# This setting defines how many times SLOWER the enchant calculations will be done. Change this if You have terrible performance issues with the plugin.
+# This number must be natural - minimum 1, 2, 3 and so on.
+# Whatever number You will set here, all potion effect enchants, effects like rejuvination will optimize themselves automatically - rejuvination will give the same amount of durability as the misc-timer-interval number, potion effects will be longer, etc
+# Max value is set to be 5, but it's not recommended to give it values above 3.
+# WARNING: /ep reload won't help for this function! Must at least /reload or restart the server.
+misc-timer-interval: 1
+
+# This is the minimum XP level required to get a custom enchant whilst enchanting.
+# The lower the level when enchanting an item, the less chances that a player will get it (max chances at level 30)
+# Default is 20 (it's best to keep it at that, except if You wish to make it higher)
+required-level: 20
+
+# This is the general chance of getting a custom enchant.
+# Default is 45 (45% rate at level 30 enchanting)
+# For the curious ones: item will get a custom enchant when a random number with a cap of [130 - level used for enchanting] < or = enchanting-rate
+enchanting-rate: 45
+
+# This is the maximum number of custom enchants appearing on one item from an enchanting table.
+# If any of the two numbers below is less or equal 0, You won't get custom enchants for either items or books.
+max-custom-enchants: 4
+max-custom-enchants-on-book: 2
+
+# This value, unlike the one above this option, defines an ABSOLUTE amount of max enchants.
+# This defines the maximum allowed enchants on an item overally, You won't be able to add more in anvils and such.
+absolute-max-enchants: 5
+ignores-enchant-command: true
+vanilla-enchants-included: false
+
+# If set to true, when enchanting an item, it will have a tooltip briefly defining what the enchant does.
+# You can edit them in the config file enchant-tooltips.yml
+helpful-tooltips-enabled: true
+
+# Setting this to false will make it so that people cant damage other people with poison, withering, etc., only other living entities.
+affects-player-to-player: true
+
+enabled-curse: false
+
+enchants:
+  # agility will be automatically disabled on 1.8 servers.
+  agility:
+    # When enabled is false, enchant will not appear from enchanting table
+    # and already enchanted items will not work about the enchant function.
+    # Enchants still can be got enchant from command.
+    enabled: true
+    # The name when this enchant is applied on item.
+    display-name: 'Agility'
+    # Defines the maximum level.
+    # If this is below 1, it will be treated as set to 1. 
+    # For some enchants, setting this to above default value or some higher numbers may have no effect.
+    max-level: 3
+    # If You set this to true, anvils will be disabled for items that have this enchant present on them.
+    disable-anvils: false
+    # Setting this to true disables using anvils to combine levels of this enchant.
+    disable-level-combining: false
+    # Setting this to true disables using grindstone to remove this enchant from item.
+    disable-grindstone: false
+    enchant-chance: 13
+
+  auto_jump:
+    enabled: true
+    display-name: 'Auto Jump'
+    max-level: 3
+    # This being false means that armor enchants
+    # like night_vision, auto_speed, etc, will NOT work while a player is holding it in hand.
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    enchant-chance: 30
+
+  # conflicts with silktouch.
+  auto_smelt:
+    enabled: true
+    display-name: 'Auto Smelt'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    disabled-ores:
+      - ""
+    enchant-chance: 20
+
+    # If this is set to false, fortune + autosmelting won't give more ingots from smelted ores.
+    fortune-synergy: true
+
+  auto_speed:
+    enabled: true
+    display-name: 'Auto Speed'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 30
+
+  beastmaster:
+    enabled: true
+    display-name: 'Beastmaster'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+
+    # beastmaster increases a tamed wolf's damage and decreases the damage it receives
+    # This is how much damage will be increased with the 'beastmaster I' enchant. (By default, a quarter of a heart - 0.5)
+    base-damage-increase: 0.5
+
+    # This multiplies the base-damage-increase with this amount times the enchant level
+    # For example if base-damage-increase is 0.5, and this is set to 3, a level II enchant will deal 1.5 damage, level III 3.0 damage and so on.
+    damage-increase-multiplier: 2.0
+
+    # Same logics as base-damage-increase, but for damage reduction for the wolf
+    base-damage-decrease: 0.5
+
+    damage-decrease-multiplier: 2.0
+    enchant-chance: 15
+
+  beheading:
+    enabled: true
+    display-name: 'Beheading'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    # When false, enchant does not work for attacking on player.
+    use-pve: true
+    # When false, enchant does not work for attacking on entity.
+    use-pvp: true
+    # Setting this to true will allow this enchants to apply to axes too
+    on-axes: false
+    # What are the chance for each levelup of beheading for a mob to drop its head?
+    base-activation-rate: 0.02
+    extra-activation-rate-per-level: 0.03
+    # Should the beheading enchant drop (basically) every animal/monster's head
+    # that is available from Marc_IRL's (MHF) accounts?
+    enable-MHF-heads: false
+    enchant-chance: 25
+
+  blindness:
+    enabled: true
+    display-name: 'Blindness'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 30
+
+    # How many seconds will the potion effect stay around on a player.
+    base-effect-duration: 1.5
+    # How many seconds the duration increases per level.
+    # If you want to decrease duration per level, set minus value.
+    extra-duration-per-level: 1
+    
+    # Chance to give effect to victim at start level.
+    base-activation-rate: 0.033
+    # Extra chance per level.
+    # level1: 0.033(=3.3%), level2: 0.066(=6.6%), level3: 0.099(=9.9%) ...
+    extra-activation-rate-per-level: 0.033
+
+  brindness_arrow:
+    enabled: true
+    display-name: 'Brindness Arrow'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+
+    base-effect-duration: 1
+    extra-duration-per-level: 1
+    
+    base-activation-rate: 0.033
+    extra-activation-rate-per-level: 0.033
+    enchant-chance: 35
+
+  electrocute:
+    enabled: true
+    display-name: 'Electrocute'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 20
+
+    base-effect-duration: 7
+    extra-duration-per-level: 1
+    
+    base-activation-rate: 0.05
+    # 5%, 10%, 15%...
+    extra-activation-rate-per-level: 0.05
+
+    # Here You can define the damage for each piece of armor worn by the living entity. (1.00 = half a heart of damage)
+    base-iron-damage: 0.25
+    extra-iron-damage-per-level: 0.25
+    base-gold-damage: 0.3
+    extra-gold-damage-per-level: 0.3
+    base-chain-damage: 0.1
+    extra-chain-damage-per-level: 0.1
+
+  excavation:
+    enabled: true
+    display-name: 'Excavation'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    # Blocks excavating obsidian blocks.
+    no-obsidian: true
+    enchant-chance: 25
+
+  exploding_arrow:
+    enabled: true
+    display-name: 'Exploding Arrow'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    enchant-chance: 15
+
+    # This option defines the base strength of the explosion.
+    # This number calculates how strong the hit will be to a player and how much blocks will it break (if that one's enabled.)
+    base-explosion-strength: 1.2
+    # How much does it rise each level? This value will be multiplied [level] times (base * multiplier ^ level).
+    strength-rise-multiplier: 1.45
+    
+    explodes-blocks: false
+
+    # This defines a chance to explode everytime an arrow is fired.
+    base-activation-rate: 0.1
+    extra-activation-rate-per-level: 0.1
+
+
+  updraft:
+    enabled: true
+    display-name: 'Updraft'
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 15
+
+  harvesting:
+    enabled: true
+    display-name: 'Harvesting'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 25
+
+  heavy_curse:
+    enabled: true
+    display-name: 'Curse of Heavy'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 15
+
+    causes-mining-fatigue: true
+
+  hunger_curse:
+    enabled: true
+    display-name: 'Curse of Hunger'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+
+    # hunger curse sometimes reduces half a food bar randomly
+    # What is the rate for each level on the whole player equipment's set (x*hunger-rate/100, where x is combined enchant level from the whole armor set)
+    # Checked every second.
+    hunger-rate-per-level: 0.04
+    enchant-chance: 30
+
+  ice_aspect:
+    enabled: true
+    display-name: 'Ice Aspect'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    enchant-chance: 15
+
+    # Duration is in seconds, how much You will be frozen in place.
+    base-effect-duration: 2
+    extra-duration-per-level: 2
+
+    base-activation-rate: 0.05
+    # 5%, 10%, 15%...
+    extra-activation-rate-per-level: 0.05
+
+  insulation:
+    enabled: true
+    display-name: 'Insulation'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    enchant-chance: 21
+
+    # NOTE 1: 1.00 here equals half a heart!
+    # NOTE 2: insulation stacks up - for every armor with insulation, the damage multiplier from electrocute/plasma will be multiplied by the amounts defined below.
+    # By how much will the electrocute/plasma DAMAGE ADDITION will be multiplied if the player has insulation?
+    # Example, a player with plasma II attacks a full diamond player. normally, they should do about an extra heart of damage, but if the victim has a full insulation III set, it will change that value to a bit more than half a heart.
+    # Where x is, change that to diamond/leather.
+    electrocute-multiplier: 0.65
+    plasma-multiplier: 0.7
+
+    # By how much will the multiplication number (they're defined just above this option for electrocute/plasma) decrease with each level of insulation?
+    extra-decrement-per-level: 0.07
+
+  life_leech:
+    enabled: true
+    display-name: 'Life Leech'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+
+    base-activation-rate: 0.033
+    # 3.3%, 6.6%, 9.9%...
+    extra-activation-rate-per-level: 0.033
+
+    # Each amount is a half-a-heart
+    life_leech-heal-amount: 1
+    enchant-chance: 15
+
+  life:
+    enabled: true
+    display-name: 'Life'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    # If You set health-per-level to 1, player will get 0.5 extra hearts.
+    # 2 means they will get 1 heart per level, and so on.
+    health-per-level: 1
+    enchant-chance: 8
+
+  rapid_fire:
+    enabled: true
+    display-name: 'Rapid Fire'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+
+    # How accurate are the additional arrows? Higher the number, bigger the accuracy.
+    # Error of each axis is calculated like ([random double value] / accuracy)
+    accuracy: 7.0
+    enchant-chance: 10
+
+  night_vision:
+    enabled: true
+    display-name: 'Night Vision'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    enchant-chance: 40
+
+  plasma:
+    enabled: true
+    display-name: 'Plasma'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 15
+
+    base-activation-rate: 0.05
+    # 5%, 10%, 15%...
+    extra-activation-rate-per-level: 0.05
+
+    # Here You can define the damage for each piece of armor worn by the living entity. (1.00 = half a heart of damage)
+    base-leather-damage: 0.2
+    extra-leather-damage-per-level: 0.2
+    base-diamond-damage: 0.45
+    extra-diamond-damage-per-level: 0.45
+
+
+  poison_arrow:
+    enabled: true
+    display-name: 'Poison Arrow'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    enchant-chance: 40
+
+    base-effect-duration: 2.25
+    # If you want to decrease duration per level, set minus value.
+    # I: 2.25, II: 1.75, III: 1.25 by default
+    extra-duration-per-level: -0.5
+
+    # Basically, what enchant level will give what potion effect level.
+    base-effect-amplifier: 1
+    extra-effect-amplifier-per-level: 1
+
+    base-activation-rate: 0.05
+    # 5%, 10%, 15%...
+    extra-activation-rate-per-level: 0.05
+
+  quake:
+    enabled: true
+    display-name: 'Quake'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 20
+
+    launches-players: false
+    launches-other-entities: true
+    falldamage-affects-players: false
+    falldamage: 10
+    durability-cost: 20
+
+    has-cooldown: true
+    
+    # in seconds
+    cooldown: 20
+
+    # Settings this to true means that if a player right clicks on a chest with a quake equipped item,
+    # it'll open the chest instead of doing the quake.
+    world-interaction-priority: false
+
+    # Size in blocks to each side of quake's effectivity.
+    base-explosion-size: 5
+    extra-explosion-size-per-level: 3
+
+    # Base velocity a player will get for quake.
+    # In other word, how fast and far will player fly away when affected with quake.
+    # Feel free to play around with the numbers, but don't go too big!
+    base-velocity: 1.25
+    extra-velocity-per-level: 0.2
+
+  regain:
+    enabled: true
+    display-name: 'Regain'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 20
+
+    # Tools do not absorb listed materials.
+    # Regain enchantment is changed to absorb dropped item to regain durability.
+    # So this list is not broken block but dropped item.
+    disabled-materials: []
+    ### WOODEN_PICKAXE materials
+    # - ACACIA_LOG
+    # - BIRCH_LOG
+    # - DARK_OAK_LOG
+    # - JUNGLE_LOG
+    # - OAK_LOG
+    # - SPRUCE_LOG
+    # - CRIMSON_STEM
+    # - WARPED_STEM
+
+    ### STONE_PICKAXE materials
+    # - STONE
+    # - COBBLED_DEEPSLATE
+    # - DEEPSLATE
+    # - BLACKSTONE
+
+    ### GOLDEN_PICKAXE materials
+    # - GOLD_ORE
+    # - GOLD_INGOT
+    # - DEEPSLATE_GOLD_ORE
+    # - RAW_GOLD
+
+    ### IRON_PICKAXE materials
+    # - IRON_ORE
+    # - IRON_INGOT
+    # - DEEPSLATE_IRON_ORE
+    # - RAW_IRON
+
+    ### DIAMOND_PICKAXE materials
+    # - DIAMOND_ORE
+    # - DIAMOND
+    # - DEEPSLATE_DIAMOND_ORE
+
+    ### NETHERITE_PICKAXE materials
+    # - NETHERITE_INGOT
+    # - ANCIENT_DEBRIS
+
+  regeneration:
+    enabled: true
+    display-name: 'Regeneration'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    enchant-chance: 30
+
+    # This is the chance that a player will heal every 1 second.
+    # If a player has, let's say, a chestplate and boots with regeneration I and a helmet with regeneration II,
+    # the overall chance would be heal-rate-per-level * sum of the enchant levels (0.03 * 4 = 0.12 = 12% by default)
+    # If a player has a full set of Regen II armor, the default chance is 24%.
+    heal-rate-per-level: 0.03
+
+    # This is the amount of extra HP You heal with regeneration enchant.
+    # This being 1 means it will heal half-a-heart. 2 means one full heart, and so on.
+    heal-amount: 1
+
+  reinforced:
+    enabled: true
+    display-name: 'Reinforced'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 30
+
+    # With this enchant, how much damage the tool gets when used.
+    durability-cost: 3
+
+    # This is how often the tool avoid extra damage above.
+    # Even if this rate is 1, tool will get at least 1 damage.
+    base-unbreaking-rate: 0.2
+    extra-unbreaking-rate-per-level: 0.15
+
+  rejuvination:
+    enabled: true
+    display-name: 'Rejuvination'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+
+    # This number edits the rate of the durability regen rate with this formula:
+    # After every 0.5 seconds, there is a chance of (base-regen-rate + extra-regen-rate-per-level * rejuvination level) to heal 1 durability.
+    # So if you have rejuv level 3 with default setting, the chance to regen would be about 45% every 0.5 seconds
+    base-regen-rate: 0.1
+    extra-regen-rate-per-level: 0.15
+    enchant-chance: 25
+
+  slowness:
+    enabled: true
+    display-name: 'Slowness'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 45
+
+    base-effect-duration: 2.25
+    extra-duration-per-level: -0.5
+
+    base-effect-amplifier: 1
+    extra-effect-amplifier-per-level: 1
+
+    base-activation-rate: 0.05
+    extra-activation-rate-per-level: 0.05
+
+  soulbound:
+    enabled: true
+    display-name: 'Soulbound'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 15
+
+    # Change if soulbound enchant dissapears off of an item when a player dies and regains the item from death.
+    dissapears-after-death: true
+
+  unstable_curse:
+    enabled: true
+    display-name: 'Curse of Unstable'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 30
+
+    # Same logic: rejuvnation.base-regen-rate
+    base-decay-rate: 0.05
+    extra-decay-rate-per-level: 0.025
+
+  venom:
+    enabled: true
+    display-name: 'Venom'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 50
+
+    base-effect-duration: 2.25
+    extra-duration-per-level: -0.5
+
+    base-effect-amplifier: 1
+    extra-effect-amplifier-per-level: 1
+
+    base-activation-rate: 0.05
+    extra-activation-rate-per-level: 0.05
+
+  water_breathing:
+    enabled: true
+    display-name: 'Water Breathing'
+    max-level: 1
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    work-in-hand: false
+    enchant-chance: 40
+
+  well_fed:
+    enabled: true
+    display-name: 'Well Fed'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    enchant-chance: 20
+
+    # Well fed works by randomly giving half a food bar.
+    # What is the rate for each level on the whole player equipment's set (x*well-fed-rate/100, where x is combined enchant level from the whole armor set)
+    well-fed-rate: 3.0
+
+  withering_arrow:
+    enabled: true
+    display-name: 'Withering Arrow'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    enchant-chance: 25
+
+    base-effect-duration: 2.25
+    extra-duration-per-level: -0.25
+
+    base-effect-amplifier: 1
+    extra-effect-amplifier-per-level: 1
+
+    base-activation-rate: 0.035
+    # 3.5%, 7%, 10.5% ...
+    extra-activation-rate-per-level: 0.035
+
+  withering:
+    enabled: true
+    display-name: 'Withering'
+    max-level: 3
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 20
+
+    base-effect-duration: 2.25
+    extra-duration-per-level: -0.25
+
+    base-effect-amplifier: 1
+    extra-effect-amplifier-per-level: 1
+
+    base-activation-rate: 0.035
+    extra-activation-rate-per-level: 0.035
+
+  xp_boost:
+    enabled: true
+    display-name: 'Xp Boost'
+    max-level: 2
+    disable-anvils: false
+    disable-level-combining: false
+    disable-grindstone: false
+    use-pve: true
+    use-pvp: true
+    on-axes: false
+    enchant-chance: 20
+
+    base-boost-multiplier: 1.2
+    # level1: 1.4, level2: 1.6 level3: 1.8 ...
+    extra-boost-multiplier-per-level: 0.2

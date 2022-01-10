@@ -1,0 +1,41 @@
+name: EnchantsPlus
+main: net.okocraft.enchantsplus.EnchantsPlus
+version: "${project.version}"
+api-version: 1.18
+softdepend: [ "WorldGuard", "VeinMiner", "AAC", "SpartanAPI", "Feudal", "Vault", "PlayerPoints", "NoCheatPlus" ]
+commands:
+  enchantsplus:
+    aliases: ["enchants", "ep"]
+permissions:
+  enchantsplus.commands.help:
+    default: true
+  enchantsplus.commands.list:
+    default: true
+  enchantsplus.commands.info:
+    default: true
+  enchantsplus.commands.enchant:
+    default: op
+  enchantsplus.commands.enchant.exceedmaxlevel:
+    default: false
+  enchantsplus.commands.enchant.other:
+    default: op
+  enchantsplus.commands.deenchant:
+    default: op
+  enchantsplus.commands.deenchant.others:
+    default: op
+  enchantsplus.commands.toggle.enchants:
+    default: true
+  enchantsplus.commands.toggle.notifications:
+    default: true
+  enchantsplus.commands.toggle.particles:
+    default: true
+  enchantsplus.commands.reload:
+    default: op
+  enchantsplus.admin:
+    enchantsplus.commands.enchants.enchant: true
+    enchantsplus.commands.reload: true
+  enchantsplus.shopsigns.create:
+    default: op
+  enchantsplus.shopsigns.use:
+    default: true
+    description: Allows using shop signs
