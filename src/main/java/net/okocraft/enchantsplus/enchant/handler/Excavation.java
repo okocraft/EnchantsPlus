@@ -124,7 +124,6 @@ public class Excavation extends EnchantPlusHandler<ExcavationConfig, BlockBreakE
             }
         }
 
-        Block extraBlock;
         for (Block blockToBreak : blocksToBreak) {
             if (!blockToBreak.equals(event.getBlock()) && isPreferredTool(blockToBreak, handItem.getItem())) {
                 excavatedBlocks.add(blockToBreak);
@@ -132,10 +131,10 @@ public class Excavation extends EnchantPlusHandler<ExcavationConfig, BlockBreakE
             }
 
             for (int i = 1; i < level; i++) {
-                extraBlock = blockToBreak.getRelative(playerFace);
-                if (isPreferredTool(extraBlock, handItem.getItem())) {
-                    excavatedBlocks.add(extraBlock);
-                    user.breakBlock(extraBlock);
+                blockToBreak = blockToBreak.getRelative(playerFace);
+                if (isPreferredTool(blockToBreak, handItem.getItem())) {
+                    excavatedBlocks.add(blockToBreak);
+                    user.breakBlock(blockToBreak);
                 }
             }
         }
