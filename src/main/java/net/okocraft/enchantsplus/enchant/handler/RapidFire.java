@@ -19,6 +19,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -84,6 +85,10 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
         boolean isSilent = arrow.isSilent();
         PickupStatus pickupStatus = arrow.getPickupStatus();
         boolean isPersistent = arrow.isPersistent();
+        ProjectileSource shooter = arrow.getShooter();
+        boolean isShotFromCrossbow = arrow.isShotFromCrossbow();
+        boolean isVisualFire = arrow.isVisualFire();
+
 
         new BukkitRunnable() {
             int count = 0;
@@ -97,7 +102,7 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
                     return;
                 }
                 ItemStack currentHand = equipment.getItem(event.getHand());
-                if (count >= arrows || currentHand == null || !currentHand.isSimilar(bow.getItem())) {
+                if (count >= arrows || currentHand == null || !currentHand.isSimilar(event.getBow())) {
                     cancel();
                     return;
                 }
@@ -125,6 +130,9 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
                 another.setSilent(isSilent);
                 another.setPickupStatus(pickupStatus);
                 another.setPersistent(isPersistent);
+                another.setShooter(shooter);
+                another.setShotFromCrossbow(isShotFromCrossbow);
+                another.setVisualFire(isVisualFire);
 
                 EntityShootBowEvent anotherEvent = new EntityShootBowEvent(
                         event.getEntity(),
