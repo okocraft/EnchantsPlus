@@ -97,7 +97,7 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
                     return;
                 }
                 ItemStack currentHand = equipment.getItem(event.getHand());
-                if (count >= arrows || currentHand == null || currentHand.isSimilar(bow.getItem())) {
+                if (count >= arrows || currentHand == null || !currentHand.isSimilar(bow.getItem())) {
                     cancel();
                     return;
                 }
