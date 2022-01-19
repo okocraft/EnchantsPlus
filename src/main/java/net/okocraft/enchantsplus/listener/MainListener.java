@@ -1,5 +1,6 @@
 package net.okocraft.enchantsplus.listener;
 
+import net.ess3.api.IEssentials;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.enchant.handler.Agility;
 import net.okocraft.enchantsplus.enchant.handler.AutoJump;
@@ -37,7 +38,16 @@ import net.okocraft.enchantsplus.enchant.handler.WellFed;
 import net.okocraft.enchantsplus.enchant.handler.WitheringArrow;
 import net.okocraft.enchantsplus.enchant.handler.Withering;
 import net.okocraft.enchantsplus.enchant.handler.XPBoost;
+import net.okocraft.enchantsplus.event.MainTimerTickEvent;
 import net.okocraft.enchantsplus.event.PlayerTickEvent;
+import net.okocraft.enchantsplus.model.LocalItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import com.earth2me.essentials.commands.Commanditemlore;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,6 +64,11 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.server.TabCompleteEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.StringUtil;
 
 public class MainListener implements Listener {
 
@@ -245,4 +260,88 @@ public class MainListener implements Listener {
 
         plugin.getPlayerData().clearCache();
     }
+
+    private int timer = 0;
+    @EventHandler
+    public void updateLore(MainTimerTickEvent event) {
+        timer++;
+        if (timer < 20) {
+            return;
+        }
+        timer = 0;
+
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack item = player.getInventory().getItem(slot);
+                LocalItemStack localItem = plugin.wrapItem(item);
+                if (localItem == null) {
+                    continue;
+                }
+                localItem.fixLore();
+                ItemStack fixed = localItem.getItem();
+                if (!item.equals(fixed)) {
+                    player.getInventory().setItem(slot, fixed);
+                }
+            }
+        }
+    }
+
+    private static final Set<String> LORE_COMMANDS = Set.of("itemlore", "lore", "elore", "ilore", "eilore", "eitemlore");
+    @EventHandler
+    public void onTabComplete(TabCompleteEvent event) {
+
+        String buffer = event.getBuffer();
+        String command;
+        if (buffer.startsWith("/essentials:")) {
+            command = buffer.substring(12, buffer.indexOf(" "));
+        } else if (buffer.startsWith("/")) {
+            command = buffer.substring(1, buffer.indexOf(" "));
+        } else {
+            return;
+        }
+        if (!LORE_COMMANDS.contains(command)) {
+            return;
+        }
+        String[] args = buffer.substring(buffer.indexOf(" ") + 1, buffer.length()).split(" ", -1);
+        if (args.length < 2 || !args[0].equalsIgnoreCase("set")) {
+            return;
+        }
+        
+        if (!(event.getSender() instanceof Player sender)) {
+            return;
+        }
+        
+        LocalItemStack handItem = plugin.wrapItem(sender.getInventory().getItemInMainHand());
+        if (handItem == null) {
+            return;
+        }
+
+        if (args.length == 2) {
+            List<String> completion = IntStream.rangeClosed(1, handItem.getLore().size())
+                    .boxed().map(String::valueOf).toList();
+            event.setCompletions(StringUtil.copyPartialMatches(args[1], completion, new ArrayList<>()));
+            return;
+        }
+        
+        int loreLineIndex;
+        try {
+            loreLineIndex = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            return;
+        }
+        
+        int enchantLoreLines = handItem.getStoredEnchantLore().size();
+        args[1] = String.valueOf(loreLineIndex + enchantLoreLines);
+        
+        try {
+            Plugin pl = plugin.getServer().getPluginManager().getPlugin("Essentials");
+            if (!(pl instanceof IEssentials ess)) {
+                return;
+            }
+            
+            event.setCompletions(new Commanditemlore().tabComplete(plugin.getServer(), ess.getUser(sender), null, null, args));            
+        } catch (NoClassDefFoundError ignored) {
+        }
+    }
 }
+    

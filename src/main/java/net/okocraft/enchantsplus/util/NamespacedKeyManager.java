@@ -15,6 +15,7 @@ public class NamespacedKeyManager {
     // used in LocalItemStack
     public static final NamespacedKey ENCHANTMENTS_KEY = new NamespacedKey(PLUGIN, "enchantments");
     public static final NamespacedKey LORE_KEY = new NamespacedKey(PLUGIN, "lore");
+    public static final NamespacedKey ENCHANT_LORE_KEY = new NamespacedKey(PLUGIN, "enchant_lore");
     
     // used in CustomDataTypes
     public static final NamespacedKey ID_KEY = new NamespacedKey(PLUGIN, "id");

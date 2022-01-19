@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,8 +31,6 @@ public class LocalItemStack {
 
     private final EnchantPlusData enchantPlusData;
 
-    private final List<String> lore = new ArrayList<>();
-
     public LocalItemStack(EnchantsPlus plugin, ItemStack handle) {
         this.plugin = plugin;
         this.handle = handle.clone();
@@ -42,13 +41,9 @@ public class LocalItemStack {
                 CustomDataTypes.ENCHANT_PLUS_DATA,
                 new EnchantPlusData(new HashMap<>())
         );
-        if (!container.has(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY)) {
-            List<String> originalLore = getHandledMeta().getLore();
-            setLore(originalLore);
-        } else {
-            setLore(new ArrayList<>(Arrays.asList(
-                container.get(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY)
-            )));
+        if (!container.has(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY)
+                || !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, CustomDataTypes.STRING_ARRAY)) {
+            setLore(Objects.requireNonNullElse(getHandledMeta().getLore(), new ArrayList<>()));
         }
     }
 
@@ -61,6 +56,7 @@ public class LocalItemStack {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.remove(NamespacedKeyManager.ENCHANTMENTS_KEY);
         container.remove(NamespacedKeyManager.LORE_KEY);
+        container.remove(NamespacedKeyManager.ENCHANT_LORE_KEY);
         item.setItemMeta(meta);
         return item;
     }
@@ -94,32 +90,90 @@ public class LocalItemStack {
     }
 
     public void setLore(List<String> lore) {
-        this.lore.clear();
-        if (lore != null) {
-            this.lore.addAll(lore);
-        } 
-
+        setStoredLore(Objects.requireNonNullElse(lore, new ArrayList<>()));
+        List<String> enchantLore = createEnchantLore();
+        setStoredEnchantLore(enchantLore);
+        enchantLore.addAll(lore);
         ItemMeta meta = getHandledMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY, this.lore.toArray(String[]::new));
+        meta.setLore(enchantLore);
         setItemMeta(meta);
-
-        fixLore();
     }
 
     public boolean hasLore() {
-        return !lore.isEmpty();
+        return !getLore().isEmpty();
     }
 
     public List<String> getLore() {
-        return new ArrayList<>(lore);
+        return new ArrayList<>(Arrays.asList(
+            getHandledMeta().getPersistentDataContainer().getOrDefault(
+                    NamespacedKeyManager.LORE_KEY,
+                    CustomDataTypes.STRING_ARRAY,
+                    new String[] {}
+            )
+        ));
+    }
+    
+    private void setStoredLore(List<String> lore) {
+        ItemMeta meta = getHandledMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY, lore.toArray(String[]::new));
+        setItemMeta(meta);
     }
 
-    private void fixLore() {
+    public List<String> getStoredEnchantLore() {
+        return new ArrayList<>(Arrays.asList(
+            getHandledMeta().getPersistentDataContainer().getOrDefault(
+                    NamespacedKeyManager.ENCHANT_LORE_KEY,
+                    CustomDataTypes.STRING_ARRAY,
+                    new String[] {}
+            )
+        ));
+    }
+
+    private void setStoredEnchantLore(List<String> enchantLore) {
         ItemMeta meta = getHandledMeta();
-        List<String> realLore = new ArrayList<>();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(NamespacedKeyManager.ENCHANT_LORE_KEY, CustomDataTypes.STRING_ARRAY, enchantLore.toArray(String[]::new));
+        setItemMeta(meta);
+    }
+
+    public void fixLore() {
+        List<String> originalLore = getStoredEnchantLore();
+        int enchantLineSize = originalLore.size();
+        originalLore.addAll(getLore());
+        
+        List<String> realLore = new ArrayList<>(Objects.requireNonNullElse(getHandledMeta().getLore(), new ArrayList<>()));
+        while (realLore.size() < originalLore.size()) {
+            realLore.add(null);
+        }
+        
+        for (int i = realLore.size() - 1; i >= 0; i--) {
+            String realLine = realLore.get(i);
+            if (!originalLore.get(i).equals(realLine)) {
+                while (originalLore.size() - 1 < i + enchantLineSize) {
+                    originalLore.add("");
+                }
+                originalLore.set(i + enchantLineSize, realLine);
+            }
+        }
+
+        ListIterator<String> originalLoreIt = originalLore.listIterator(originalLore.size());
+        while (originalLoreIt.hasPrevious()) {
+            if (originalLoreIt.previous() == null) {
+                originalLoreIt.remove();
+            } else {
+                break;
+            }
+        }
+
+        setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+    }
+
+    private List<String> createEnchantLore() {
+        List<String> enchantLore = new ArrayList<>();
 
         List<EnchantPlus> enchants = new ArrayList<>(enchantPlusData.enchantments.keySet());
+
         if (!enchants.isEmpty()) {
             Collections.sort(enchants, (e1, e2) -> e1.getId().compareTo(e2.getId()));
             List<String> tooltips = new ArrayList<>();
@@ -128,22 +182,17 @@ public class LocalItemStack {
                 int level = enchantPlusData.enchantments.get(enchant);
 
                 String enchantDisplayName = plugin.getMainConfig().getBy(enchant).getDisplayName();
-                realLore.add((enchant.isCursed() ? ChatColor.RED : ChatColor.GRAY) + enchantDisplayName + " "
-                        + EnchantAPI.getLevelSymbol(level));
+                ChatColor color = (enchant.isCursed() ? ChatColor.RED : ChatColor.GRAY);
+                enchantLore.add(color + enchantDisplayName + " " + color + EnchantAPI.getLevelSymbol(level) + color);
                 tooltips.add(plugin.getTooltipsConfig().getTooltip(enchant));
             }
 
             if (plugin.getMainConfig().getGeneralConfig().isHelpfulTooltipsEnabled()) {
-                realLore.add("");
-                realLore.addAll(tooltips);
+                enchantLore.add("");
+                enchantLore.addAll(tooltips);
             }
         }
-
-        if (hasLore()) {
-            realLore.addAll(lore);
-        }
-        meta.setLore(realLore);
-        setItemMeta(meta);
+        return enchantLore;
     }
 
     public List<EnchantPlus> getPossibleCustomEnchants(ItemStack item) {
