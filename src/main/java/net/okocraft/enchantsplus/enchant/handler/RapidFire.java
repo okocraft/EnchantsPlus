@@ -10,7 +10,10 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionData;
@@ -79,6 +82,8 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
         boolean isGlowing = arrow.isGlowing();
         boolean isInvulnerable = arrow.isInvulnerable();
         boolean isSilent = arrow.isSilent();
+        PickupStatus pickupStatus = arrow.getPickupStatus();
+        boolean isPersistent = arrow.isPersistent();
 
         new BukkitRunnable() {
             int count = 0;
@@ -86,7 +91,13 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
             @Override
             public void run() {
 
-                if (count >= arrows) {
+                EntityEquipment equipment = event.getEntity().getEquipment();
+                if (equipment == null) {
+                    cancel();
+                    return;
+                }
+                ItemStack currentHand = equipment.getItem(event.getHand());
+                if (count >= arrows || currentHand == null || currentHand.isSimilar(bow.getItem())) {
                     cancel();
                     return;
                 }
@@ -112,6 +123,8 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
                 another.setGlowing(isGlowing);
                 another.setInvulnerable(isInvulnerable);
                 another.setSilent(isSilent);
+                another.setPickupStatus(pickupStatus);
+                another.setPersistent(isPersistent);
 
                 EntityShootBowEvent anotherEvent = new EntityShootBowEvent(
                         event.getEntity(),
