@@ -133,9 +133,8 @@ public class LocalItemStack {
                 tooltips.add(plugin.getTooltipsConfig().getTooltip(enchant));
             }
 
-            realLore.add("");
-            
             if (plugin.getMainConfig().getGeneralConfig().isHelpfulTooltipsEnabled()) {
+                realLore.add("");
                 realLore.addAll(tooltips);
             }
         }
