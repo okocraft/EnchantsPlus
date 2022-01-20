@@ -274,7 +274,7 @@ public class MainListener implements Listener {
             for (EquipmentSlot slot : EquipmentSlot.values()) {
                 ItemStack item = player.getInventory().getItem(slot);
                 LocalItemStack localItem = plugin.wrapItem(item);
-                if (localItem == null) {
+                if (localItem == null || localItem.getCustomEnchants().isEmpty()) {
                     continue;
                 }
                 localItem.fixLore();
