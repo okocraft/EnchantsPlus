@@ -143,16 +143,36 @@ public class LocalItemStack {
         originalLore.addAll(getLore());
         
         List<String> realLore = new ArrayList<>(Objects.requireNonNullElse(getHandledMeta().getLore(), new ArrayList<>()));
+        
+        // Add operation.
+        boolean isAddOperation = true;
+        for (int i = 0; i < originalLore.size(); i++) {
+            String originalLine = originalLore.get(i);
+            String realLine = realLore.get(i);
+            if (!originalLine.equals(realLine)) {
+                isAddOperation = false;
+                break;
+            }
+        }
+        if (isAddOperation) {
+            originalLore.add(realLore.get(realLore.size() - 1));
+            setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+            return;
+        }
+
+        // Set or remove operation.
+
         while (realLore.size() < originalLore.size()) {
             realLore.add(null);
+        }
+        while (originalLore.size() < realLore.size() + enchantLineSize) {
+            originalLore.add(null);
         }
         
         for (int i = realLore.size() - 1; i >= 0; i--) {
             String realLine = realLore.get(i);
-            if (!originalLore.get(i).equals(realLine)) {
-                while (originalLore.size() - 1 < i + enchantLineSize) {
-                    originalLore.add("");
-                }
+            String originalLine = originalLore.get(i);
+            if (!Objects.equals(originalLine, realLine)) {
                 originalLore.set(i + enchantLineSize, realLine);
             }
         }
@@ -165,6 +185,7 @@ public class LocalItemStack {
                 break;
             }
         }
+        originalLore.replaceAll(line -> line == null ? "" : line);
 
         setLore(originalLore.subList(enchantLineSize, originalLore.size()));
     }
