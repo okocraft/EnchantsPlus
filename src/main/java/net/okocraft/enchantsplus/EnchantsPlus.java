@@ -1,7 +1,6 @@
 package net.okocraft.enchantsplus;
 
 import net.okocraft.enchantsplus.listener.NewEnchantListener;
-import java.util.logging.Level;
 
 import net.okocraft.enchantsplus.bridge.BridgeManager;
 import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridgeImpl;
@@ -74,7 +73,7 @@ public class EnchantsPlus extends JavaPlugin {
             }
         }.runTaskTimer(this, 1, 1);
 
-        log(Level.INFO, "Done!", "\u001b[32;1m");
+        getLogger().info("Done!");
     }
 
     public void onDisable() {
@@ -84,7 +83,7 @@ public class EnchantsPlus extends JavaPlugin {
         reloadConfig();
 
         bridgeManager.loadBridges();
-        log(Level.INFO, "Loaded configs; Assigned instance", "\u001b[33;1m");
+        getLogger().info("Loaded configs and assigned plugin bridge instances.");
         
         final PluginManager pluginManager = getServer().getPluginManager();
         HandlerList.unregisterAll(this);
@@ -94,12 +93,11 @@ public class EnchantsPlus extends JavaPlugin {
         pluginManager.registerEvents(new AnvilListener(this), this);
         pluginManager.registerEvents(new GrindstoneListener(this), this);
 
-        log(Level.INFO, "Registered events", "\u001b[33;1m");
+        getLogger().info("Registered events.");
 
         if (bridgeManager.getVaultBridge() instanceof VaultBridgeImpl
                 || bridgeManager.getPlayerPointsBridge() instanceof PlayerPointsBridgeImpl) {
-            log(Level.INFO, "Detected Vault or PlayerPoints (or both); Enabling shop signs",
-                    "\u001b[33;1m");
+            getLogger().info("Detected Vault or PlayerPoints (or both).");
         }
     }
 
@@ -132,10 +130,5 @@ public class EnchantsPlus extends JavaPlugin {
         languagesConfig.reload();
         playerData.reload();
         tooltipsConfig.reload();
-    }
-
-    public void log(Level level, String message, String prefix) {
-        String suffix = "\u001b[0m";
-        getServer().getLogger().log(level, prefix + "[EnchantsPlus] " + message + suffix);
     }
 }

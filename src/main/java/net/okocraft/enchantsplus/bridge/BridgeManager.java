@@ -18,7 +18,6 @@ import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeImpl;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeVoid;
 import net.okocraft.enchantsplus.listener.AdvancedAntiCheatListener;
 import net.okocraft.enchantsplus.listener.SpartanAntiCheatListener;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
@@ -180,7 +179,7 @@ public class BridgeManager implements Listener {
         if (pm.isPluginEnabled("AAC")) {
             advancedAntiCheatListener = new AdvancedAntiCheatListener(plugin);
             pm.registerEvents(advancedAntiCheatListener, plugin);
-            plugin.log(Level.INFO, "Detected AAC; Hooked up into it", "\u001b[33;1m");
+            plugin.getLogger().info("Detected AAC, hooked up into it.");
         }
     }
 
@@ -192,7 +191,7 @@ public class BridgeManager implements Listener {
         if (pm.isPluginEnabled("SpartanAPI")) {
             spartanAntiCheatListener = new SpartanAntiCheatListener(plugin);
             pm.registerEvents(spartanAntiCheatListener, plugin);
-            plugin.log(Level.INFO, "Detected Spartan AntiCheat; Hooked up into it", "\u001b[33;1m");
+            plugin.getLogger().info("Detected Spartan AntiCheat, hooked up into it.");
         }
     }
 
