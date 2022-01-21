@@ -78,7 +78,15 @@ public abstract class EnchantPlusHandler<C extends EnchantConfig, T extends Even
             if (slotItem != null && slotItem.isSimilar(clone)) {
                 if (broken) {
                     // TODO: 壊れたときの挙動をデバッグする
-                    player.playEffect(EntityEffect.valueOf("BREAK_EQUIPMENT_" + slot.name()));
+                    EntityEffect breakEffect = switch (slot) {
+                        case HAND -> EntityEffect.BREAK_EQUIPMENT_MAIN_HAND;
+                        case OFF_HAND -> EntityEffect.BREAK_EQUIPMENT_OFF_HAND;
+                        case FEET -> EntityEffect.BREAK_EQUIPMENT_BOOTS;
+                        case LEGS -> EntityEffect.BREAK_EQUIPMENT_LEGGINGS;
+                        case CHEST -> EntityEffect.BREAK_EQUIPMENT_CHESTPLATE;
+                        case HEAD -> EntityEffect.BREAK_EQUIPMENT_HELMET;
+                    };
+                    player.playEffect(breakEffect);
                 }
                 inventory.setItem(slot, what);
                 break;
