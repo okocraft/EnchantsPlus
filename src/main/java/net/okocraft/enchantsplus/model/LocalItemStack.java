@@ -148,6 +148,10 @@ public class LocalItemStack {
         boolean isAddOperation = true;
         for (int i = 0; i < originalLore.size(); i++) {
             String originalLine = originalLore.get(i);
+            if (realLore.size() <= i) {
+                isAddOperation = false;
+                break;
+            }
             String realLine = realLore.get(i);
             if (!originalLine.equals(realLine)) {
                 isAddOperation = false;
@@ -155,8 +159,12 @@ public class LocalItemStack {
             }
         }
         if (isAddOperation) {
-            originalLore.add(realLore.get(realLore.size() - 1));
-            setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+            if (originalLore.size() != 0) {
+                originalLore.addAll(realLore.subList(originalLore.size(), realLore.size()));
+                setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+            } else {
+                setLore(Collections.emptyList());
+            }
             return;
         }
 
