@@ -77,7 +77,6 @@ public abstract class EnchantPlusHandler<C extends EnchantConfig, T extends Even
             // noinspection ConstantConditions
             if (slotItem != null && slotItem.isSimilar(clone)) {
                 if (broken) {
-                    // TODO: 壊れたときの挙動をデバッグする
                     EntityEffect breakEffect = switch (slot) {
                         case HAND -> EntityEffect.BREAK_EQUIPMENT_MAIN_HAND;
                         case OFF_HAND -> EntityEffect.BREAK_EQUIPMENT_OFF_HAND;
