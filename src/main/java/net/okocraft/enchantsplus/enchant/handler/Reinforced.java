@@ -51,9 +51,9 @@ public class Reinforced extends EnchantPlusHandler<ReinforcedConfig, BlockDamage
 
     private static boolean isReinforcedTarget(Material type) {
         return switch (type) {
-            case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GOLD_ORE, IRON_ORE,
+            case COAL_ORE, DIAMOND_ORE, EMERALD_ORE, GOLD_ORE, IRON_ORE, COPPER_ORE,
                     LAPIS_ORE, REDSTONE_ORE, DEEPSLATE_COAL_ORE, DEEPSLATE_DIAMOND_ORE,
-                    DEEPSLATE_EMERALD_ORE, DEEPSLATE_GOLD_ORE, DEEPSLATE_IRON_ORE,
+                    DEEPSLATE_EMERALD_ORE, DEEPSLATE_GOLD_ORE, DEEPSLATE_IRON_ORE, DEEPSLATE_COPPER_ORE,
                     DEEPSLATE_LAPIS_ORE, DEEPSLATE_REDSTONE_ORE, NETHER_QUARTZ_ORE -> true;
             default -> false;
         };
