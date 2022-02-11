@@ -71,8 +71,8 @@ public enum EnchantPlus {
     ),
     UPDRAFT(
         false,
-        Set.of(EnchantmentTarget.WEARABLE),
-        Set.of(EnchantmentTarget.WEARABLE)
+        Set.of(EnchantmentTarget.ELYTRA),
+        Set.of(EnchantmentTarget.ELYTRA)
     ),
     HARVESTING(
         false,

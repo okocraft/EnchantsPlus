@@ -226,7 +226,7 @@ public enum EnchantmentTarget {
         @Override
         public boolean includes(@NotNull Material item) {
             return ARMOR.includes(item)
-                    || item.equals(Material.ELYTRA)
+                    || ELYTRA.includes(item)
                     || item.equals(Material.CARVED_PUMPKIN)
                     || item.equals(Material.JACK_O_LANTERN)
                     || item.equals(Material.SKELETON_SKULL)
@@ -235,6 +235,16 @@ public enum EnchantmentTarget {
                     || item.equals(Material.PLAYER_HEAD)
                     || item.equals(Material.CREEPER_HEAD)
                     || item.equals(Material.DRAGON_HEAD);
+        }
+    },
+
+    /**
+     * Allows the enchantment to be placed on wearable items.
+     */
+    ELYTRA {
+        @Override
+        public boolean includes(@NotNull Material item) {
+            return item.equals(Material.ELYTRA);
         }
     },
 
@@ -299,6 +309,8 @@ public enum EnchantmentTarget {
         EnchantmentTarget result;
         if (this == SHOVEL || this == PICKAXE || this == AXE || this == HOE) {
             result = TOOL;
+        } else if (this == ELYTRA) {
+            result = WEARABLE;
         } else {
             result = this;
         }
