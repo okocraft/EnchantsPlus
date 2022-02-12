@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -294,11 +295,15 @@ public class LocalItemStack {
 
     public void combineCustomEnchants(Map<EnchantPlus, Integer> enchants) {
         EnchantConfig config;
+        var set = new HashSet<EnchantPlus>();
         for (Map.Entry<EnchantPlus, Integer> entry : enchants.entrySet()) {
             if (!entry.getKey().canEnchantWithAnvil(getType())) {
                 continue;
             }
-            if (entry.getKey().conflictsWith(enchantPlusData.enchantments.keySet(), getEnchantments().keySet())) {
+            set.clear();
+            set.addAll(enchantPlusData.enchantments.keySet());
+            set.remove(entry.getKey());
+            if (entry.getKey().conflictsWith(set, getEnchantments().keySet())) {
                 continue;
             }
             config = plugin.getMainConfig().getBy(entry.getKey());
