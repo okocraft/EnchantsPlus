@@ -302,7 +302,8 @@ public enum EnchantmentTarget {
     }
 
     public static EnchantmentTarget fromBukkit(org.bukkit.enchantments.EnchantmentTarget bukkitEnchantmentTarget) {
-        return valueOf(bukkitEnchantmentTarget.name());
+        return bukkitEnchantmentTarget == org.bukkit.enchantments.EnchantmentTarget.WEAPON ? SWORD :
+                valueOf(bukkitEnchantmentTarget.name());
     } 
 
     public org.bukkit.enchantments.EnchantmentTarget toBukkit() {
