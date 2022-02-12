@@ -151,8 +151,8 @@ public enum EnchantPlus {
     ),
     REJUVINATION(
         false,
-        Set.of(EnchantmentTarget.ARMOR),
-        Set.of(EnchantmentTarget.ARMOR)
+        Set.of(EnchantmentTarget.BREAKABLE),
+        Set.of(EnchantmentTarget.BREAKABLE)
     ),
     SLOWNESS(
         false,
