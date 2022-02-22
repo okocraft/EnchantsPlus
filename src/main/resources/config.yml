@@ -292,12 +292,12 @@ enchants:
     disable-level-combining: false
     disable-grindstone: false
     work-in-hand: false
+    enchant-chance: 30
 
     # hunger curse sometimes reduces half a food bar randomly
     # What is the rate for each level on the whole player equipment's set (x*hunger-rate/100, where x is combined enchant level from the whole armor set)
     # Checked every second.
     hunger-rate-per-level: 0.04
-    enchant-chance: 30
 
   ice_aspect:
     enabled: true
@@ -668,7 +668,7 @@ enchants:
 
     # Well fed works by randomly giving half a food bar.
     # What is the rate for each level on the whole player equipment's set (x*well-fed-rate/100, where x is combined enchant level from the whole armor set)
-    well-fed-rate: 3.0
+    well-fed-rate-per-level: 0.04
 
   withering_arrow:
     enabled: true
