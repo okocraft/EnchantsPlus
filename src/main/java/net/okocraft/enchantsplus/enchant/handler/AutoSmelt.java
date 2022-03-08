@@ -10,6 +10,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.World;
+import org.bukkit.block.Container;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
@@ -47,6 +48,10 @@ public class AutoSmelt extends EnchantPlusHandler<AutoSmeltConfig, BlockDropItem
         Player user = event.getPlayer();
 
         if (!Tag.MINEABLE_PICKAXE.isTagged(event.getBlockState().getType())) {
+            return;
+        }
+
+        if (event.getBlockState() instanceof Container) {
             return;
         }
 
