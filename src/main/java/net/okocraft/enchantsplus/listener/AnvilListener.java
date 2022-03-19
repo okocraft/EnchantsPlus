@@ -65,12 +65,16 @@ public class AnvilListener implements Listener {
             return;
         }
 
-        LocalItemStack item1 = plugin.wrapItem(event.getInventory().getItem(0)).clone();
-        LocalItemStack item2 = plugin.wrapItem(event.getInventory().getItem(1)).clone();
-        LocalItemStack result = plugin.wrapItem(event.getInventory().getItem(2)).clone();
+        LocalItemStack item1 = plugin.wrapItem(event.getInventory().getItem(0));
+        LocalItemStack item2 = plugin.wrapItem(event.getInventory().getItem(1));
+        LocalItemStack result = plugin.wrapItem(event.getInventory().getItem(2));
         if (item1 == null || item2 == null || item2.getCustomEnchants().isEmpty()) {
             return;
         }
+
+        item1 = item1.clone();
+        item2 = item2.clone();
+        result = result.clone();
 
         Map<EnchantPlus, Integer> item1Enchants = item1.getCustomEnchants();
         Map<EnchantPlus, Integer> resultEnchants = new HashMap<>(result.getCustomEnchants());
