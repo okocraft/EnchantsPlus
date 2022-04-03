@@ -55,6 +55,10 @@ public class AutoSmelt extends EnchantPlusHandler<AutoSmeltConfig, BlockDropItem
             return;
         }
 
+        if (event.getBlockState() instanceof Container) {
+            return;
+        }
+
         LocalItemStack handItem = plugin.wrapItem(user.getInventory().getItemInMainHand());
 
         if (!isValidTool(handItem) ||
