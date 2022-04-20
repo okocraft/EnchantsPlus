@@ -28,7 +28,7 @@ public class SpartanAntiCheatListener implements Listener {
             if (handItem != null && (handItem.hasCustomEnchant(EnchantPlus.EXCAVATION) || handItem.hasCustomEnchant(EnchantPlus.REINFORCED))) {
                 event.setCancelled(true);
             }
-        } else if (hackType == HackType.Fly) {
+        } else if (hackType == HackType.IrregularMovements) {
             LocalItemStack boots = plugin.wrapItem(player.getEquipment().getBoots());
             if (boots != null && boots.hasCustomEnchant(EnchantPlus.UPDRAFT)) {
                 event.setCancelled(true);
