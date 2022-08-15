@@ -27,9 +27,9 @@ final class ConflictionManager {
         }
     }
 
-    private static Map<Enchantment, WrappedEnchantment> wrapperMapBukkit = new HashMap<>();
-    private static Map<EnchantPlus, WrappedEnchantment> wrapperMapCustom = new HashMap<>();
-    private static Map<WrappedEnchantment, Set<WrappedEnchantment>> conflictions = new HashMap<>();
+    private static final Map<Enchantment, WrappedEnchantment> wrapperMapBukkit = new HashMap<>();
+    private static final Map<EnchantPlus, WrappedEnchantment> wrapperMapCustom = new HashMap<>();
+    private static final Map<WrappedEnchantment, Set<WrappedEnchantment>> conflictions = new HashMap<>();
     static {
         for (Enchantment enchant : Enchantment.values()) {
             wrapperMapBukkit.put(enchant, new WrappedEnchantment(enchant));

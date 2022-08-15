@@ -137,5 +137,5 @@ public enum CheckType {
     
     NET_PACKETFREQUENCY,
     
-    NET_SOUNDDISTANCE;
+    NET_SOUNDDISTANCE
 }

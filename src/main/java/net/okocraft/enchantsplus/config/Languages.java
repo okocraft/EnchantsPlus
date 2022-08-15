@@ -270,7 +270,7 @@ public final class Languages {
                 public void sendTo(CommandSender sender, EnchantPlus enchant) {
                     if (isString()) {
                         sendMessage(sender, placeholder(
-                            "%n", String.valueOf(enchant.getId()),
+                            "%n", enchant.getId(),
                             "%a", "1",
                             "%b", String.valueOf(plugin.getMainConfig().getBy(enchant).getMaxLevel()),
                             "%s", EnchantInfoSection.this.enchant.getInfo(enchant)

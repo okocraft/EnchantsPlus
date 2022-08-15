@@ -43,10 +43,10 @@ public class EnchantsPlus extends JavaPlugin {
     private final Tooltips tooltipsConfig = new Tooltips(this);
     
     @Getter
-    private EnchantAPI enchantAPI = new EnchantAPI(this);
+    private final EnchantAPI enchantAPI = new EnchantAPI(this);
     
     @Getter
-    private BridgeManager bridgeManager = new BridgeManager(this);
+    private final BridgeManager bridgeManager = new BridgeManager(this);
 
     @Getter
     private Commands commands;

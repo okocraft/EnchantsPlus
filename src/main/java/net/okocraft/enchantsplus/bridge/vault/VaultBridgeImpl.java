@@ -10,7 +10,7 @@ import lombok.Getter;
 public class VaultBridgeImpl implements VaultBridge {
 
     @Getter
-    private @NotNull Economy eco;
+    private final @NotNull Economy eco;
 
     public VaultBridgeImpl() {
         RegisteredServiceProvider<Economy> serviceProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);

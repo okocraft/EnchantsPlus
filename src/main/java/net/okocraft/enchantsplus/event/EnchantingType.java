@@ -4,5 +4,5 @@ public enum EnchantingType {
     COMMAND,
     ANVIL,
     ENCHANTING_TABLE,
-    CUSTOM;
+    CUSTOM
 }

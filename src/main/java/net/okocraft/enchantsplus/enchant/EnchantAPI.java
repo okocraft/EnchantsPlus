@@ -126,7 +126,7 @@ public class EnchantAPI {
     }
 
     public enum MaxEnchantCheckResult {
-        TOO_MANY_TOTAL, TOO_MANY_CUSTOM, NO_PROBLEM, INVALID_ITEM;
+        TOO_MANY_TOTAL, TOO_MANY_CUSTOM, NO_PROBLEM, INVALID_ITEM
     }
 
 }
