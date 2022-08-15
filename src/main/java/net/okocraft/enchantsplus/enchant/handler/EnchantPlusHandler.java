@@ -74,7 +74,6 @@ public abstract class EnchantPlusHandler<C extends EnchantConfig, T extends Even
             ItemStack slotItem = inventory.getItem(slot);
             // EntityEquipment#getItem(Equipment) returns **null** when the armor is not set.
             // THIS IS BUKKIT API. WE MUST ALWAYS CHECK THEIR IMPLEMENTATIONS.
-            // noinspection ConstantConditions
             if (slotItem != null && slotItem.isSimilar(clone)) {
                 if (broken) {
                     EntityEffect breakEffect = switch (slot) {
