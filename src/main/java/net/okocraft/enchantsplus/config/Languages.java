@@ -23,10 +23,10 @@ import lombok.Getter;
 public final class Languages {
 
     private static final Set<String> SUPPORTED_LANGUAGES = new HashSet<>(Arrays.asList("en_us", "ja_jp"));
-    
+
     private final EnchantsPlus plugin;
     private final Supplier<String> defaultLanguage;
-    
+
     private final Map<String, Language> languages = new HashMap<>();
 
     public Languages(EnchantsPlus plugin) {
@@ -39,7 +39,7 @@ public final class Languages {
 
         @Getter
         private final String languageCode;
-    
+
         Language(String languageCode) {
             super(Languages.this.plugin, "language/" + languageCode + ".yml");
             this.languageCode = languageCode;
@@ -63,7 +63,7 @@ public final class Languages {
             public final PlaceholderEndPoint<String> usage = new PlaceholderEndPoint<>(this, "usage", "%usage%");
             public final PlaceholderEndPoint<String> noArgMessage = new PlaceholderEndPoint<>(this, "no-arg-message", "%version%");
             public final PlaceholderEndPoint<String> noPlayerFound = new PlaceholderEndPoint<>(this, "no-player-found", "%name%");
-            
+
             public final EnchantSection enchantCommand = new EnchantSection();
             public class EnchantSection extends Section {
                 private EnchantSection() {
@@ -125,7 +125,7 @@ public final class Languages {
                             }
                         }
                     }
-                    
+
                     public String getHelpDescription(BaseCommand command) {
                         NoPlaceholderEndPoint description = index.get(command.getName());
                         if (description != null) {
@@ -168,25 +168,29 @@ public final class Languages {
                     }
 
                     public void sendWithoutPrefixTo(CommandSender sender, EnchantmentTarget target, java.util.List<EnchantPlus> enchants) {
-                        String enchantsString = "&f[&r";
+                        StringBuilder builder = new StringBuilder("&f[&r");
                         for (int i = 0; i < enchants.size(); i++) {
                             EnchantPlus enchant = enchants.get(i);
                             Config.EnchantConfig config = plugin.getMainConfig().getBy(enchant);
-                            String enchantName = config.getDisplayName();
+
                             if (!config.isEnabled()) {
-                                enchantsString += "&c" + enchantName + "&r";
+                                builder.append("&c");
                             } else if (enchant.isCursed()) {
-                                enchantsString += "&6" + enchantName + "&r";
+                                builder.append("&6");
                             } else {
-                                enchantsString += "&a" + enchantName + "&r";
+                                builder.append("&a");
                             }
+
+                            builder.append(config.getDisplayName()).append("&r");
+
                             if (i + 1 < enchants.size()) {
-                                enchantsString += "&7, &r";
+                                builder.append("&7, &r");
                             }
                         }
-                        enchantsString += "&f]";
 
-                        sendMessage(sender, false, placeholder("%enchant-target%", target.getName(), "%enchants%", enchantsString));
+                        builder.append("&f]");
+
+                        sendMessage(sender, false, placeholder("%enchant-target%", target.getName(), "%enchants%", builder.toString()));
                     }
                 }
             }
@@ -403,7 +407,7 @@ public final class Languages {
 
         // If the endpoint do not have placeholder, it can be abstractized.
         public class NoPlaceholderEndPoint extends EndPoint {
-            
+
             private NoPlaceholderEndPoint(Section parentSection, String sectionName) {
                 super(parentSection, sectionName);
             }
@@ -444,7 +448,7 @@ public final class Languages {
                     sendMessage(sender, placeholder(placeholderKey, placeholder.toString()));
                 }
             }
-            
+
             public void sendWithoutPrefixTo(CommandSender sender, T placeholder) {
                 if (isString()) {
                     sendMessage(sender, false, placeholder(placeholderKey, placeholder.toString()));
@@ -488,7 +492,7 @@ public final class Languages {
      * included jar file and plugin data folder, method will try to use default
      * language "en_us". If default "en_us" language is not available, throw
      * {@link IllegalStateException}.
-     * 
+     *
      * @param viewer viewer to retrieve its language code.
      * @return {@link Language}.
      * @throws IllegalStateException If retrieved language and default language
@@ -534,7 +538,7 @@ public final class Languages {
         languages.values().forEach(Language::reload);
     }
 
-    
+
     private final String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     String getLocale(CommandSender sender) {
         if (sender instanceof Player) {
