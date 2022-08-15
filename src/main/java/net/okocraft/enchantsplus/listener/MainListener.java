@@ -302,7 +302,7 @@ public class MainListener implements Listener {
         if (!LORE_COMMANDS.contains(command)) {
             return;
         }
-        String[] args = buffer.substring(buffer.indexOf(" ") + 1, buffer.length()).split(" ", -1);
+        String[] args = buffer.substring(buffer.indexOf(" ") + 1).split(" ", -1);
         if (args.length < 2 || !args[0].equalsIgnoreCase("set")) {
             return;
         }
