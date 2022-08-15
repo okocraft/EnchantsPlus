@@ -17,7 +17,6 @@ import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridge;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeImpl;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeVoid;
 import net.okocraft.enchantsplus.listener.AdvancedAntiCheatListener;
-import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -25,13 +24,13 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class BridgeManager implements Listener {
 
     private final EnchantsPlus plugin;
 
-    private final Server server;
     private final Logger log;
     private final PluginManager pm;
 
@@ -50,10 +49,8 @@ public class BridgeManager implements Listener {
 
     public BridgeManager(EnchantsPlus plugin) {
         this.plugin = plugin;
-
-        this.server = plugin.getServer();
         this.log = plugin.getLogger();
-        this.pm = server.getPluginManager();
+        this.pm = plugin.getServer().getPluginManager();
     }
 
     @EventHandler
@@ -181,37 +178,22 @@ public class BridgeManager implements Listener {
     }
 
     public NoCheatPlusBridge getNoCheatPlusBridge() {
-        if (this.noCheatPlusBridge == null) {
-            return new NoCheatPlusBridgeVoid();
-        }
-        return this.noCheatPlusBridge;
+        return Objects.requireNonNullElseGet(this.noCheatPlusBridge, NoCheatPlusBridgeVoid::new);
     }
 
     public PlayerPointsBridge getPlayerPointsBridge() {
-        if (this.playerPointsBridge == null) {
-            return new PlayerPointsBridgeVoid();
-        }
-        return this.playerPointsBridge;
+        return Objects.requireNonNullElseGet(this.playerPointsBridge, PlayerPointsBridgeVoid::new);
     }
 
     public VaultBridge getVaultBridge() {
-        if (this.vaultBridge == null) {
-            return new VaultBridgeVoid();
-        }
-        return this.vaultBridge;
+        return Objects.requireNonNullElseGet(this.vaultBridge, VaultBridgeVoid::new);
     }
 
     public VeinMinerBridge getVeinMinerBridge() {
-        if (this.veinMinerBridge == null) {
-            return new VeinMinerBridgeVoid();
-        }
-        return this.veinMinerBridge;
+        return Objects.requireNonNullElseGet(this.veinMinerBridge, VeinMinerBridgeVoid::new);
     }
 
     public WorldGuardBridge getWorldguardBridge() {
-        if (this.worldguardBridge == null) {
-            return new WorldGuardBridgeVoid();
-        }
-        return this.worldguardBridge;
+        return Objects.requireNonNullElseGet(this.worldguardBridge, WorldGuardBridgeVoid::new);
     }
 }
