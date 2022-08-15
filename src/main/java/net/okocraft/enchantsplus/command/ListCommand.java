@@ -3,6 +3,7 @@ package net.okocraft.enchantsplus.command;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ListCommand extends BaseCommand {
 
         List<EnchantmentTarget> targets = new ArrayList<>(Arrays.asList(EnchantmentTarget.values()));
         targets.retainAll(targetMap.keySet());
-        Collections.sort(targets, (t1, t2) -> t1.name().compareTo(t2.name()));
+        targets.sort(Comparator.comparing(Enum::name));
         for (EnchantmentTarget target : targets) {
             language.command.listCommand.content.sendWithoutPrefixTo(sender, target, targetMap.get(target));
         }

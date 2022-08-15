@@ -3,6 +3,7 @@ package net.okocraft.enchantsplus.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -205,7 +206,7 @@ public class LocalItemStack {
         List<EnchantPlus> enchants = new ArrayList<>(enchantPlusData.enchantments.keySet());
 
         if (!enchants.isEmpty()) {
-            Collections.sort(enchants, (e1, e2) -> e1.getId().compareTo(e2.getId()));
+            enchants.sort(Comparator.comparing(EnchantPlus::getId));
             List<String> tooltips = new ArrayList<>();
 
             for (EnchantPlus enchant : enchants) {

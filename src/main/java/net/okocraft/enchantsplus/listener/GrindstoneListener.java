@@ -21,10 +21,9 @@ public class GrindstoneListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInventoryClick(final InventoryClickEvent event) {
         Inventory topInv = event.getView().getTopInventory();
-        if (!(topInv instanceof GrindstoneInventory)) {
+        if (!(topInv instanceof GrindstoneInventory grindstoneInventory)) {
             return;
         }
-        GrindstoneInventory grindstoneInventory = (GrindstoneInventory) topInv;
         new BukkitRunnable() {
             @Override
             public void run() {

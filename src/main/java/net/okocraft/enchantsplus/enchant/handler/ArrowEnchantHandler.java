@@ -36,8 +36,7 @@ public abstract class ArrowEnchantHandler<C extends BowEnchantConfig>
             return;
         }
 
-        if (config instanceof BowActivatableEnchantConfig) {
-            BowActivatableEnchantConfig baeConfig = (BowActivatableEnchantConfig) config;
+        if (config instanceof BowActivatableEnchantConfig baeConfig) {
             if (random.nextDouble() >= baeConfig.getActivationRate(bow.getCustomEnchantLevel(config.getType()))) {
                 return;
             }

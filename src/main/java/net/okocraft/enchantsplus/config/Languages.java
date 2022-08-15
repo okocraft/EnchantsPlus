@@ -58,11 +58,11 @@ public final class Languages {
             public final NoPlaceholderEndPoint notAllowedOthers = new NoPlaceholderEndPoint(this, "not-allowed-others");
             public final NoPlaceholderEndPoint noPlayerDefined = new NoPlaceholderEndPoint(this, "no-player-defined");
             public final NoPlaceholderEndPoint invalidItem = new NoPlaceholderEndPoint(this, "invalid-item");
-            public final PlaceholderEndPoint<Integer> exceedMaxLevel = new PlaceholderEndPoint<Integer>(this, "exceed-max-level", "%level%");
-            public final PlaceholderEndPoint<String> noPermission = new PlaceholderEndPoint<String>(this, "no-permission", "%permission%");
-            public final PlaceholderEndPoint<String> usage = new PlaceholderEndPoint<String>(this, "usage", "%usage%");
-            public final PlaceholderEndPoint<String> noArgMessage = new PlaceholderEndPoint<String>(this, "no-arg-message", "%version%");
-            public final PlaceholderEndPoint<String> noPlayerFound = new PlaceholderEndPoint<String>(this, "no-player-found", "%name%");
+            public final PlaceholderEndPoint<Integer> exceedMaxLevel = new PlaceholderEndPoint<>(this, "exceed-max-level", "%level%");
+            public final PlaceholderEndPoint<String> noPermission = new PlaceholderEndPoint<>(this, "no-permission", "%permission%");
+            public final PlaceholderEndPoint<String> usage = new PlaceholderEndPoint<>(this, "usage", "%usage%");
+            public final PlaceholderEndPoint<String> noArgMessage = new PlaceholderEndPoint<>(this, "no-arg-message", "%version%");
+            public final PlaceholderEndPoint<String> noPlayerFound = new PlaceholderEndPoint<>(this, "no-player-found", "%name%");
             
             public final EnchantSection enchantCommand = new EnchantSection();
             public class EnchantSection extends Section {
@@ -105,7 +105,7 @@ public final class Languages {
 
                 public final NoPlaceholderEndPoint noPermittedCommand = new NoPlaceholderEndPoint(this, "no_permitted-command");
                 public final NoPlaceholderEndPoint line = new NoPlaceholderEndPoint(this, "line");
-                public final BiPlaceholderEndPoint<String, String> content = new BiPlaceholderEndPoint<String, String>(this, "content", "%usage%", "%description%");
+                public final BiPlaceholderEndPoint<String, String> content = new BiPlaceholderEndPoint<>(this, "content", "%usage%", "%description%");
 
                 public final Description description = new Description();
                 public class Description extends Section {
@@ -218,12 +218,12 @@ public final class Languages {
                 super("shop");
             }
 
-            public final PlaceholderEndPoint<String> enchNotFound1 = new PlaceholderEndPoint<String>(this, "ench_not_found_1", "%enchant%");
+            public final PlaceholderEndPoint<String> enchNotFound1 = new PlaceholderEndPoint<>(this, "ench_not_found_1", "%enchant%");
             public final NoPlaceholderEndPoint enchNotFound2 = new NoPlaceholderEndPoint(this, "ench_not_found_2");
-            public final PlaceholderEndPoint<String> wrongLevelFormat = new PlaceholderEndPoint<String>(this, "wrong_level_format", "%input%");
+            public final PlaceholderEndPoint<String> wrongLevelFormat = new PlaceholderEndPoint<>(this, "wrong_level_format", "%input%");
             public final NoPlaceholderEndPoint wrongLevel = new NoPlaceholderEndPoint(this, "wrong_level");
             public final NoPlaceholderEndPoint wrongItem = new NoPlaceholderEndPoint(this, "wrong_item");
-            public final PlaceholderEndPoint<String> wrongPriceFormat = new PlaceholderEndPoint<String>(this, "wrong_price_format", "%input%");
+            public final PlaceholderEndPoint<String> wrongPriceFormat = new PlaceholderEndPoint<>(this, "wrong_price_format", "%input%");
             public final NoPlaceholderEndPoint itemAlreadyHasEnchant = new NoPlaceholderEndPoint(this, "item_already_has_enchant");
             public final NoPlaceholderEndPoint notEnoughMoney = new NoPlaceholderEndPoint(this, "not_enough_money");
             public final NoPlaceholderEndPoint notEnoughPoints = new NoPlaceholderEndPoint(this, "not_enough_points");
@@ -247,11 +247,11 @@ public final class Languages {
             public final NoPlaceholderEndPoint blinded = new NoPlaceholderEndPoint(this, "blinded");
             public final NoPlaceholderEndPoint slowed = new NoPlaceholderEndPoint(this, "slowed");
             public final NoPlaceholderEndPoint withered = new NoPlaceholderEndPoint(this, "withered");
-            public final PlaceholderEndPoint<Double> leeched = new PlaceholderEndPoint<Double>(this, "leeched", "%amount%");
-            public final PlaceholderEndPoint<String> disabled = new PlaceholderEndPoint<String>(this, "disabled", "%enchant%");
-            public final PlaceholderEndPoint<Integer> quakeOnCooldown = new PlaceholderEndPoint<Integer>(this, "quake-on-cooldown", "%number%");
-            public final PlaceholderEndPoint<Integer> tooManyTotal = new PlaceholderEndPoint<Integer>(this, "too_many_total", "%number%");
-            public final PlaceholderEndPoint<Integer> tooManyCustom = new PlaceholderEndPoint<Integer>(this, "too_many_custom", "%number%");
+            public final PlaceholderEndPoint<Double> leeched = new PlaceholderEndPoint<>(this, "leeched", "%amount%");
+            public final PlaceholderEndPoint<String> disabled = new PlaceholderEndPoint<>(this, "disabled", "%enchant%");
+            public final PlaceholderEndPoint<Integer> quakeOnCooldown = new PlaceholderEndPoint<>(this, "quake-on-cooldown", "%number%");
+            public final PlaceholderEndPoint<Integer> tooManyTotal = new PlaceholderEndPoint<>(this, "too_many_total", "%number%");
+            public final PlaceholderEndPoint<Integer> tooManyCustom = new PlaceholderEndPoint<>(this, "too_many_custom", "%number%");
 
         }
 
