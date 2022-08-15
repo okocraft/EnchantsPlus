@@ -17,8 +17,6 @@ import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridge;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeImpl;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeVoid;
 import net.okocraft.enchantsplus.listener.AdvancedAntiCheatListener;
-import net.okocraft.enchantsplus.listener.SpartanAntiCheatListener;
-import java.util.logging.Logger;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -27,14 +25,16 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.PluginManager;
 
+import java.util.logging.Logger;
+
 public class BridgeManager implements Listener {
-   
+
     private final EnchantsPlus plugin;
 
     private final Server server;
     private final Logger log;
     private final PluginManager pm;
-    
+
     private NoCheatPlusBridge noCheatPlusBridge;
 
     private PlayerPointsBridge playerPointsBridge;
@@ -47,7 +47,6 @@ public class BridgeManager implements Listener {
 
     private AdvancedAntiCheatListener advancedAntiCheatListener;
 
-    private SpartanAntiCheatListener spartanAntiCheatListener;
 
     public BridgeManager(EnchantsPlus plugin) {
         this.plugin = plugin;
@@ -76,9 +75,8 @@ public class BridgeManager implements Listener {
         }
 
         registerAdvancedAntiCheatListener();
-        registerSpartanAntiCheatListener();
     }
-    
+
     @EventHandler
     public void onPluginDisable(PluginDisableEvent event) {
         if (event.getPlugin().getName().equals("WorldGuard")) {
@@ -109,7 +107,6 @@ public class BridgeManager implements Listener {
         this.veinMinerBridge = newVeinMinerBridge();
 
         registerAdvancedAntiCheatListener();
-        registerSpartanAntiCheatListener();
         HandlerList.unregisterAll(this);
         pm.registerEvents(this, plugin);
     }
@@ -180,18 +177,6 @@ public class BridgeManager implements Listener {
             advancedAntiCheatListener = new AdvancedAntiCheatListener(plugin);
             pm.registerEvents(advancedAntiCheatListener, plugin);
             plugin.getLogger().info("Detected AAC, hooked up into it.");
-        }
-    }
-
-    private void registerSpartanAntiCheatListener() {
-        if (spartanAntiCheatListener != null) {
-            HandlerList.unregisterAll(spartanAntiCheatListener);
-            spartanAntiCheatListener = null;
-        }
-        if (pm.isPluginEnabled("SpartanAPI")) {
-            spartanAntiCheatListener = new SpartanAntiCheatListener(plugin);
-            pm.registerEvents(spartanAntiCheatListener, plugin);
-            plugin.getLogger().info("Detected Spartan AntiCheat, hooked up into it.");
         }
     }
 
