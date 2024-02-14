@@ -25,10 +25,6 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
-            <id>janmm14-public</id>
-            <url>https://repo.janmm14.de/repository/public/</url>
-        </repository>
-        <repository>
             <id>rosewood-repo</id>
             <url>https://repo.rosewooddev.io/repository/public/</url>
         </repository>
@@ -102,11 +98,6 @@
             <artifactId>Towny</artifactId>
             <version>0.100.1.13</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.janmm14</groupId>
-            <artifactId>aac-api</artifactId>
-            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

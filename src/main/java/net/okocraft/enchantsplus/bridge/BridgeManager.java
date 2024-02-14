@@ -16,7 +16,6 @@ import net.okocraft.enchantsplus.bridge.veinminer.VeinMinerBridgeVoid;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridge;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeImpl;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeVoid;
-import net.okocraft.enchantsplus.listener.AdvancedAntiCheatListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -44,9 +43,6 @@ public class BridgeManager implements Listener {
 
     private WorldGuardBridge worldguardBridge;
 
-    private AdvancedAntiCheatListener advancedAntiCheatListener;
-
-
     public BridgeManager(EnchantsPlus plugin) {
         this.plugin = plugin;
         this.log = plugin.getLogger();
@@ -70,8 +66,6 @@ public class BridgeManager implements Listener {
         if (event.getPlugin().getName().equals("VeinMiner")) {
             this.veinMinerBridge = newVeinMinerBridge();
         }
-
-        registerAdvancedAntiCheatListener();
     }
 
     @EventHandler
@@ -103,7 +97,6 @@ public class BridgeManager implements Listener {
         this.vaultBridge = newVaultBridge();
         this.veinMinerBridge = newVeinMinerBridge();
 
-        registerAdvancedAntiCheatListener();
         HandlerList.unregisterAll(this);
         pm.registerEvents(this, plugin);
     }
@@ -162,18 +155,6 @@ public class BridgeManager implements Listener {
         } catch (NoClassDefFoundError e) {
             log.info("VeinMiner is not installed. Ignored.");
             return new VeinMinerBridgeVoid();
-        }
-    }
-
-    private void registerAdvancedAntiCheatListener() {
-        if (advancedAntiCheatListener != null) {
-            HandlerList.unregisterAll(advancedAntiCheatListener);
-            advancedAntiCheatListener = null;
-        }
-        if (pm.isPluginEnabled("AAC")) {
-            advancedAntiCheatListener = new AdvancedAntiCheatListener(plugin);
-            pm.registerEvents(advancedAntiCheatListener, plugin);
-            plugin.getLogger().info("Detected AAC, hooked up into it.");
         }
     }
 
