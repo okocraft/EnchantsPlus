@@ -16,7 +16,6 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -60,8 +59,7 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
             return;
         }
 
-        boolean doesBounce = arrow.doesBounce();
-        PotionData potionData = arrow.getBasePotionData();
+        PotionType potionType = arrow.getBasePotionType();
         final Color color;
         Color temp;
         try {
@@ -109,9 +107,8 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
 
                 Arrow another = event.getEntity().launchProjectile(arrow.getClass());
                 another.getPersistentDataContainer().set(RAPID_FIRE_ARROW_KEY, PersistentDataType.BYTE, (byte) 1);
-                another.setBounce(doesBounce);
-                if (potionData.getType() != PotionType.UNCRAFTABLE) {
-                    another.setBasePotionData(potionData);
+                if (potionType != PotionType.UNCRAFTABLE) {
+                    another.setBasePotionType(potionType);
                 }
                 if (color != null) {
                     another.setColor(color);

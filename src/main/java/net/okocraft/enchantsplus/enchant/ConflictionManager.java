@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 
 import lombok.EqualsAndHashCode;
@@ -30,8 +31,9 @@ final class ConflictionManager {
     private static final Map<Enchantment, WrappedEnchantment> wrapperMapBukkit = new HashMap<>();
     private static final Map<EnchantPlus, WrappedEnchantment> wrapperMapCustom = new HashMap<>();
     private static final Map<WrappedEnchantment, Set<WrappedEnchantment>> conflictions = new HashMap<>();
+
     static {
-        for (Enchantment enchant : Enchantment.values()) {
+        for (Enchantment enchant : Registry.ENCHANTMENT) {
             wrapperMapBukkit.put(enchant, new WrappedEnchantment(enchant));
         }
         for (EnchantPlus enchant : EnchantPlus.values()) {
