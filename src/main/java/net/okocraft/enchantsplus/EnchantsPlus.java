@@ -131,4 +131,9 @@ public class EnchantsPlus extends JavaPlugin {
         playerData.reload();
         tooltipsConfig.reload();
     }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public @NotNull String getVersion() {
+        return this.getPluginMeta().getVersion();
+    }
 }

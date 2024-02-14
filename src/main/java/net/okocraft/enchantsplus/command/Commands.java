@@ -76,7 +76,7 @@ public class Commands implements CommandExecutor, TabCompleter {
         Languages.Language.CommandSection command = language.command;
         
         if (args.length == 0) {
-            command.noArgMessage.sendWithoutPrefixTo(sender, plugin.getDescription().getVersion());
+            command.noArgMessage.sendWithoutPrefixTo(sender, plugin.getVersion());
             return true;
         }
         
