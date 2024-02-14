@@ -29,6 +29,10 @@
             <url>https://repo.janmm14.de/repository/public/</url>
         </repository>
         <repository>
+            <id>rosewood-repo</id>
+            <url>https://repo.rosewooddev.io/repository/public/</url>
+        </repository>
+        <repository>
             <id>EssentialsX-repo</id>
             <url>https://repo.essentialsx.net/releases/</url>
         </repository>
@@ -42,7 +46,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -66,7 +70,7 @@
         <dependency>
             <groupId>org.black_ixx</groupId>
             <artifactId>playerpoints</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -96,7 +100,7 @@
         <dependency>
             <groupId>com.github.TownyAdvanced</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.100.0.10</version>
+            <version>0.100.1.13</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
