@@ -1,0 +1,125 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "wtf.choco",
+    "module": "networking-common",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains",
+          "module": "annotations",
+          "version": {
+            "requires": "24.1.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "networking-common-0.0.1.jar",
+          "url": "networking-common-0.0.1.jar",
+          "size": 24557,
+          "sha512": "b2c6180bd43d4673373a5453211782ef39997601c6747b0ba6ef47a123e6fe011a2c97cbfd4e354debae0668060d990bd73d52e245ca25a1d498696e3741b28b",
+          "sha256": "5afee838043fea139f2aa7b6c48bd8a4e46b4ae29b8eec34d498faeacb3fa984",
+          "sha1": "6292023741553de84b916fd67e6bc329ca3b3346",
+          "md5": "554a2ed595bbd346909880f9a0d4e4f4"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "33.0.0-jre"
+          }
+        },
+        {
+          "group": "org.jetbrains",
+          "module": "annotations",
+          "version": {
+            "requires": "24.1.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "networking-common-0.0.1.jar",
+          "url": "networking-common-0.0.1.jar",
+          "size": 24557,
+          "sha512": "b2c6180bd43d4673373a5453211782ef39997601c6747b0ba6ef47a123e6fe011a2c97cbfd4e354debae0668060d990bd73d52e245ca25a1d498696e3741b28b",
+          "sha256": "5afee838043fea139f2aa7b6c48bd8a4e46b4ae29b8eec34d498faeacb3fa984",
+          "sha1": "6292023741553de84b916fd67e6bc329ca3b3346",
+          "md5": "554a2ed595bbd346909880f9a0d4e4f4"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "networking-common-0.0.1-javadoc.jar",
+          "url": "networking-common-0.0.1-javadoc.jar",
+          "size": 137197,
+          "sha512": "d82fa067f9c776212ad82801f2687ce686d5956c09eef2e73a9952fc4958f88f845e1dd1b8a2753436f72c84945021e8c082227aeff038dc7bf4a76adb03eadd",
+          "sha256": "e8e37461418d4d359c341e23f0cd4ef7ed5e29f0e0c3f5ad2402b6a57dc801b5",
+          "sha1": "2fc9cb04a8b33204fc2c5bde46b65f9b210a486d",
+          "md5": "12db328611da6f9c0b37a1f86343b666"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "networking-common-0.0.1-sources.jar",
+          "url": "networking-common-0.0.1-sources.jar",
+          "size": 18484,
+          "sha512": "0496ea571c50f9f54145fb8c5241a4e0e4a05a6966df7dffabef1f26ba22f77b3cab47b6346f4b019a0a3b747f87c067aabfc3f8c8de5f4a010ac61b05948f1b",
+          "sha256": "0989605c5e9b63e6652b6483f61dc580616d6da40cb864152445947ab90d57fd",
+          "sha1": "82f318b06f5647b8581af04cfc9d79c22ed63b14",
+          "md5": "c28d84da540ba9211af220aa5d873eb4"
+        }
+      ]
+    }
+  ]
+}

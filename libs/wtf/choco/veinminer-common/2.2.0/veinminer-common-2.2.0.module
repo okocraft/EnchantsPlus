@@ -1,0 +1,109 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "wtf.choco",
+    "module": "veinminer-common",
+    "version": "2.2.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "veinminer-common-2.2.0.jar",
+          "url": "veinminer-common-2.2.0.jar",
+          "size": 37598,
+          "sha512": "e17798c7b9e0537ba49d652e14ccf2705d95f3b1c251bbfd52a45968842110be429dcc5f0915c38b0ab11c8c1e452ec5e335ae039f3b0f948d9d635fa6583d38",
+          "sha256": "3184291322e1c97f957ad7ada2f3969431ddaaec9cbf6fbf2b89cef234d58ff1",
+          "sha1": "a01b9683dbc1faa7c0eefe3768347fdf2aafe377",
+          "md5": "4cd4e10d807c5a7b0dd456b69275d690"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "wtf.choco",
+          "module": "networking-common",
+          "version": {
+            "requires": "0.0.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "veinminer-common-2.2.0.jar",
+          "url": "veinminer-common-2.2.0.jar",
+          "size": 37598,
+          "sha512": "e17798c7b9e0537ba49d652e14ccf2705d95f3b1c251bbfd52a45968842110be429dcc5f0915c38b0ab11c8c1e452ec5e335ae039f3b0f948d9d635fa6583d38",
+          "sha256": "3184291322e1c97f957ad7ada2f3969431ddaaec9cbf6fbf2b89cef234d58ff1",
+          "sha1": "a01b9683dbc1faa7c0eefe3768347fdf2aafe377",
+          "md5": "4cd4e10d807c5a7b0dd456b69275d690"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "veinminer-common-2.2.0-javadoc.jar",
+          "url": "veinminer-common-2.2.0-javadoc.jar",
+          "size": 175523,
+          "sha512": "000bae704b5c92d825b1d10e5e90f2f1409a37fe4def9aa8dbf53c5804356cc5d86ef60ea199362b169b83ed90fc3f7895dc9bee885bc80f4163f8546d5598e1",
+          "sha256": "10afc8fb888eea71d23f74f1e71075d1d0fe9d35dcc20108805b7ab0942cbd31",
+          "sha1": "73d9fd370baf124208c837b4be0e8f7d9871d427",
+          "md5": "fd8332303a3c235deab0b5aea8732bd1"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "veinminer-common-2.2.0-sources.jar",
+          "url": "veinminer-common-2.2.0-sources.jar",
+          "size": 24286,
+          "sha512": "575e7df0e6e0260036b154951ee12746c1f9a808b76d417dd10968f0356929ce1699b5b46b769d886ecb00b223a5aa2a0053c94000a6b346cb12576e3b21281c",
+          "sha256": "9d489c1feeefa28dc711d4e8b363c2b10efd014393523b5dec244219f99e93fc",
+          "sha1": "2801e700de36fd731d23b3331f39766871091237",
+          "md5": "fb431ec74f77bb1bd5964e6608cc013e"
+        }
+      ]
+    }
+  ]
+}

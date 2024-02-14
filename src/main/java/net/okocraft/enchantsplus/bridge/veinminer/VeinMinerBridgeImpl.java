@@ -1,45 +1,42 @@
 package net.okocraft.enchantsplus.bridge.veinminer;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import wtf.choco.veinminer.VeinMiner;
-import wtf.choco.veinminer.api.ActivationStrategy;
-import wtf.choco.veinminer.data.AlgorithmConfig;
-import wtf.choco.veinminer.data.PlayerPreferences;
-import wtf.choco.veinminer.tool.ToolCategory;
-import wtf.choco.veinminer.tool.ToolTemplate;
-import wtf.choco.veinminer.utils.ItemValidator;
-import wtf.choco.veinminer.utils.Pair;
+import wtf.choco.veinminer.VeinMinerPlugin;
+import wtf.choco.veinminer.player.VeinMinerPlayer;
+import wtf.choco.veinminer.tool.VeinMinerToolCategory;
+import wtf.choco.veinminer.tool.VeinMinerToolCategoryHand;
+import wtf.choco.veinminer.util.VMConstants;
 
 public class VeinMinerBridgeImpl implements VeinMinerBridge {
 
+    private final VeinMinerPlugin plugin;
+
     public VeinMinerBridgeImpl() {
-        // Test to ensure plugin classes is on runtime.
-        ToolCategory.getWithTemplate(new ItemStack(Material.STONE_PICKAXE));
+        this.plugin = JavaPlugin.getPlugin(VeinMinerPlugin.class);
     }
 
     @Override
     public boolean isVeinMining(@NotNull Player player) {
-        ItemStack item = player.getInventory().getItemInMainHand();
 
-        Pair<@NotNull ToolCategory, @NotNull ToolTemplate> categoryTemplatePair = ToolCategory.getWithTemplate(item);
-        ToolCategory category = categoryTemplatePair.getLeft();
-        ToolTemplate toolTemplate = categoryTemplatePair.getRight();
-        if (category == null || (category != ToolCategory.HAND && toolTemplate == null)) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        VeinMinerToolCategory category = this.plugin.getToolCategoryRegistry().get(item, cat -> player.hasPermission(VMConstants.PERMISSION_VEINMINE.apply(cat)));
+
+        if (!(category instanceof VeinMinerToolCategoryHand)) {
             return false;
         }
 
-        // Invalid player state check
-        PlayerPreferences playerData = PlayerPreferences.get(player);
-        ActivationStrategy activation = playerData.getActivationStrategy();
-        AlgorithmConfig algorithmConfig = (toolTemplate != null) ? toolTemplate.getConfig() : category.getConfig();
-        return activation.isValid(player)
-                && category.hasPermission(player)
-                && !VeinMiner.getPlugin().getVeinMinerManager().isDisabledGameMode(player.getGameMode())
-                && !playerData.isVeinMinerDisabled(category)
-                && !algorithmConfig.isDisabledWorld(player.getWorld())
-                && ItemValidator.isValid(item, category);
+        VeinMinerPlayer veinMinerPlayer = this.plugin.getPlayerManager().get(player);
+
+        if (veinMinerPlayer == null) {
+            return false;
+        }
+
+        return veinMinerPlayer.getActivationStrategy().isActive(veinMinerPlayer) &&
+                !this.plugin.getConfiguration().isDisabledGameMode(player.getGameMode()) &&
+                !veinMinerPlayer.isVeinMinerEnabled(category) &&
+                category.getConfiguration().isDisabledWorld(player.getWorld());
     }
 }

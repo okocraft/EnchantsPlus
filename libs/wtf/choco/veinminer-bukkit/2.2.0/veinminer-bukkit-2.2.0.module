@@ -1,0 +1,130 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "wtf.choco",
+    "module": "veinminer-bukkit",
+    "version": "2.2.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.6"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "veinminer-bukkit-2.2.0.jar",
+          "url": "veinminer-bukkit-2.2.0.jar",
+          "size": 179126,
+          "sha512": "4716a2667519e1bf59a4c4cad2350789b6cb3b49a3597707e68d9edc968ac099f7f2e69990e3ca2ba2602e327904c73ef5c3683ab6741b23ff2041bea02eab7e",
+          "sha256": "5f85d683062da196b6bceccb5b9cf194b559ebb23dbf29527cc0170a97b1cc15",
+          "sha1": "6263128024532da1c247835cc6e99286ac257dc7",
+          "md5": "d80c338452920179efc92611161b5cf0"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "wtf.choco",
+          "module": "networking-common",
+          "version": {
+            "requires": "0.0.1"
+          }
+        },
+        {
+          "group": "wtf.choco",
+          "module": "veinminer-common",
+          "version": {
+            "requires": "2.2.0"
+          }
+        },
+        {
+          "group": "org.bstats",
+          "module": "bstats-bukkit",
+          "version": {
+            "requires": "3.0.2"
+          }
+        },
+        {
+          "group": "wtf.choco",
+          "module": "networking-bukkit",
+          "version": {
+            "requires": "0.0.1"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "veinminer-bukkit-2.2.0.jar",
+          "url": "veinminer-bukkit-2.2.0.jar",
+          "size": 179126,
+          "sha512": "4716a2667519e1bf59a4c4cad2350789b6cb3b49a3597707e68d9edc968ac099f7f2e69990e3ca2ba2602e327904c73ef5c3683ab6741b23ff2041bea02eab7e",
+          "sha256": "5f85d683062da196b6bceccb5b9cf194b559ebb23dbf29527cc0170a97b1cc15",
+          "sha1": "6263128024532da1c247835cc6e99286ac257dc7",
+          "md5": "d80c338452920179efc92611161b5cf0"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "veinminer-bukkit-2.2.0-javadoc.jar",
+          "url": "veinminer-bukkit-2.2.0-javadoc.jar",
+          "size": 422602,
+          "sha512": "6f7f8f454cba48d93cd879ccc0a909f9be6c347097805f0113ed8b2c73824d68be9947a449bf94df1ab69e1ff1c3157e64f2dbe7f6691800e139b028790bb305",
+          "sha256": "c9dbcc4a1f4f3e62c67cfea9f21f053f95749bba5282c51b5c139e81e69ea03c",
+          "sha1": "b524a17d0e8899e46035c50527cfd7a5927629dd",
+          "md5": "f3ca4f7f757aa3981e1a24194d627454"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "veinminer-bukkit-2.2.0-sources.jar",
+          "url": "veinminer-bukkit-2.2.0-sources.jar",
+          "size": 108360,
+          "sha512": "e7827db6a0df12b8b8e10ac1b6efa35644085a67d74f2d45527be7b5b2ce3277abfe595f41e355a7d5c5bfe3a70595eb25529b8a806e85eefb88aa3dd94b2fb2",
+          "sha256": "2fa4538b8ee95701edce5771a8419fba5118ecd18cadbc937c245dba2920c634",
+          "sha1": "9edbc18f99e018cc944560e007a6f633eedce22a",
+          "md5": "058038dc6876e3e3f4aeda4ae2a633b1"
+        }
+      ]
+    }
+  ]
+}

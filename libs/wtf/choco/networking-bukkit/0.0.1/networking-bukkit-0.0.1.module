@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "wtf.choco",
+    "module": "networking-bukkit",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains",
+          "module": "annotations",
+          "version": {
+            "requires": "24.1.0"
+          }
+        },
+        {
+          "group": "wtf.choco",
+          "module": "networking-common",
+          "version": {
+            "requires": "0.0.1"
+          }
+        },
+        {
+          "group": "org.spigotmc",
+          "module": "spigot-api",
+          "version": {
+            "requires": "1.20.4-R0.1-SNAPSHOT"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "networking-bukkit-0.0.1.jar",
+          "url": "networking-bukkit-0.0.1.jar",
+          "size": 7060,
+          "sha512": "777886278fb633f5db236de6c8d061a2a8fb6b6fe79a73504ab0a5a967d18a07a3e441a2be55836672d0cadacbb795ff1d2e69afe6b2b21ec89bf70c020b1c70",
+          "sha256": "ecb480f60e144aa61a2898c918861c52c01a077e32a30cdef4067edecfc4d03c",
+          "sha1": "a9ce2107310a97a29859de0946986570eea928f7",
+          "md5": "f5367751034ea6fdeb974cfb525ec8ff"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.guava",
+          "module": "guava",
+          "version": {
+            "requires": "33.0.0-jre"
+          }
+        },
+        {
+          "group": "org.jetbrains",
+          "module": "annotations",
+          "version": {
+            "requires": "24.1.0"
+          }
+        },
+        {
+          "group": "wtf.choco",
+          "module": "networking-common",
+          "version": {
+            "requires": "0.0.1"
+          }
+        },
+        {
+          "group": "org.spigotmc",
+          "module": "spigot-api",
+          "version": {
+            "requires": "1.20.4-R0.1-SNAPSHOT"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "networking-bukkit-0.0.1.jar",
+          "url": "networking-bukkit-0.0.1.jar",
+          "size": 7060,
+          "sha512": "777886278fb633f5db236de6c8d061a2a8fb6b6fe79a73504ab0a5a967d18a07a3e441a2be55836672d0cadacbb795ff1d2e69afe6b2b21ec89bf70c020b1c70",
+          "sha256": "ecb480f60e144aa61a2898c918861c52c01a077e32a30cdef4067edecfc4d03c",
+          "sha1": "a9ce2107310a97a29859de0946986570eea928f7",
+          "md5": "f5367751034ea6fdeb974cfb525ec8ff"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "networking-bukkit-0.0.1-javadoc.jar",
+          "url": "networking-bukkit-0.0.1-javadoc.jar",
+          "size": 79462,
+          "sha512": "139c711cbd59f41ec8335ad07b0858811a7808f31c4bac873f637851233abe566f81299f36442626853f66509465d62ef85d2e0a21118a1a7d2c2cd8b49695ad",
+          "sha256": "0630672e9f096d3e97b47637c1b3433ca28bf1c94642ae7efea2f01e46fcd7f9",
+          "sha1": "fd98505517fe3af7601c2aff0fbb4e64171f3e2f",
+          "md5": "80043159fff912876271b2c4cc706173"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "networking-bukkit-0.0.1-sources.jar",
+          "url": "networking-bukkit-0.0.1-sources.jar",
+          "size": 4824,
+          "sha512": "0b47df317093b98c0694a2288e449d3f21644f8cfc3aa0dd652543a94954c74deeb6c510a94a8a56bf2638832c7bfb6ae52a00ea353d07d60ef44bb8b80a2786",
+          "sha256": "e8bd5f4e137c4b4255515d086738489e907407a5f3beb2bdfac72bbda984393c",
+          "sha1": "c716ae464b7fd2f7e761f802573bf07a770dea71",
+          "md5": "7abc30439f3e2187d53816466b42cd04"
+        }
+      ]
+    }
+  ]
+}
