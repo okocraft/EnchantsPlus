@@ -1,5 +1,6 @@
 package net.okocraft.enchantsplus.enchant.handler;
 
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
 import net.okocraft.enchantsplus.model.LocalItemStack;
@@ -19,12 +20,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.ProjectileSource;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, EntityShootBowEvent> {
 
@@ -87,21 +88,19 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
         boolean isShotFromCrossbow = arrow.isShotFromCrossbow();
         boolean isVisualFire = arrow.isVisualFire();
 
-
-        new BukkitRunnable() {
+        event.getEntity().getScheduler().runAtFixedRate(this.plugin, new Consumer<>() {
             int count = 0;
 
             @Override
-            public void run() {
-
+            public void accept(ScheduledTask task) {
                 EntityEquipment equipment = event.getEntity().getEquipment();
                 if (equipment == null) {
-                    cancel();
+                    task.cancel();
                     return;
                 }
                 ItemStack currentHand = equipment.getItem(event.getHand());
                 if (count >= arrows || currentHand == null || !currentHand.isSimilar(event.getBow())) {
-                    cancel();
+                    task.cancel();
                     return;
                 }
 
@@ -152,7 +151,7 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
 
                         if (consumable == null || consumable.getType().isAir() || consumable.getAmount() == 0) {
                             another.remove();
-                            cancel();
+                            task.cancel();
                             return;
                         }
 
@@ -161,7 +160,7 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
 
                         if (!human.getInventory().removeItem(copied).isEmpty()) {
                             another.remove();
-                            cancel();
+                            task.cancel();
                             return;
                         }
                         callItemDamageEvent((Player) human, anotherEvent.getBow(), 1);
@@ -169,6 +168,6 @@ public class RapidFire extends EnchantPlusHandler<Config.RapidFireConfig, Entity
                 }
                 count++;
             }
-        }.runTaskTimer(plugin, 8L, 4L);
+        }, null, 8L, 4L);
     }
 }

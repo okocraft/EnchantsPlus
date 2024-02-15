@@ -1,7 +1,7 @@
 package net.okocraft.enchantsplus.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,6 +11,10 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.config.Config.EnchantConfig;
 import net.okocraft.enchantsplus.enchant.EnchantAPI;
@@ -18,12 +22,15 @@ import net.okocraft.enchantsplus.enchant.EnchantPlus;
 import net.okocraft.enchantsplus.util.NamespacedKeyManager;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class LocalItemStack {
 
@@ -37,15 +44,16 @@ public class LocalItemStack {
         this.plugin = plugin;
         this.handle = handle.clone();
 
-        PersistentDataContainer container = getHandledMeta().getPersistentDataContainer();
+        ItemMeta meta = handle.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
         this.enchantPlusData = container.getOrDefault(
                 NamespacedKeyManager.ENCHANTMENTS_KEY,
                 CustomDataTypes.ENCHANT_PLUS_DATA,
                 new EnchantPlusData(new HashMap<>())
         );
-        if (!container.has(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY)
-                || !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, CustomDataTypes.STRING_ARRAY)) {
-            setLore(Objects.requireNonNullElse(getHandledMeta().getLore(), new ArrayList<>()));
+        if (!container.has(NamespacedKeyManager.LORE_KEY, PersistentDataType.LIST.strings()) ||
+                !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, PersistentDataType.LIST.strings())) {
+            this.setOriginalLore(meta, handle.lore());
         }
     }
 
@@ -91,103 +99,101 @@ public class LocalItemStack {
         handle.addEnchantment(ench, level);
     }
 
-    public void setLore(List<String> lore) {
-        setStoredLore(Objects.requireNonNullElse(lore, new ArrayList<>()));
-        List<String> enchantLore = createEnchantLore();
-        setStoredEnchantLore(enchantLore);
-        enchantLore.addAll(lore);
-        ItemMeta meta = getHandledMeta();
-        meta.setLore(enchantLore);
-        setItemMeta(meta);
+    private void setOriginalLore(@NotNull ItemMeta meta, @Nullable List<Component> originalLore) {
+        setLoreData(meta, NamespacedKeyManager.LORE_KEY, toJson(originalLore));
+
+        List<Component> enchantLore = this.createEnchantLore();
+        setLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY, toJson(enchantLore));
+
+        List<Component> newLore;
+
+        if (originalLore != null) {
+            newLore = new ArrayList<>(enchantLore.size() + originalLore.size());
+            newLore.addAll(enchantLore);
+            newLore.addAll(originalLore);
+        } else {
+            newLore = enchantLore;
+        }
+
+        meta.lore(newLore);
+        this.setItemMeta(meta);
     }
 
-    public boolean hasLore() {
-        return !getLore().isEmpty();
+    public int calculateOriginalLoreLines() {
+        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.LORE_KEY).size();
     }
 
-    public List<String> getLore() {
-        return new ArrayList<>(Arrays.asList(
-            getHandledMeta().getPersistentDataContainer().getOrDefault(
-                    NamespacedKeyManager.LORE_KEY,
-                    CustomDataTypes.STRING_ARRAY,
-                    new String[] {}
-            )
-        ));
-    }
-    
-    private void setStoredLore(List<String> lore) {
-        ItemMeta meta = getHandledMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY, lore.toArray(String[]::new));
-        setItemMeta(meta);
-    }
-
-    public List<String> getStoredEnchantLore() {
-        return new ArrayList<>(Arrays.asList(
-            getHandledMeta().getPersistentDataContainer().getOrDefault(
-                    NamespacedKeyManager.ENCHANT_LORE_KEY,
-                    CustomDataTypes.STRING_ARRAY,
-                    new String[] {}
-            )
-        ));
-    }
-
-    private void setStoredEnchantLore(List<String> enchantLore) {
-        ItemMeta meta = getHandledMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(NamespacedKeyManager.ENCHANT_LORE_KEY, CustomDataTypes.STRING_ARRAY, enchantLore.toArray(String[]::new));
-        setItemMeta(meta);
+    public int calculateEnchantLoreLines() {
+        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.ENCHANT_LORE_KEY).size();
     }
 
     public void fixLore() {
-        List<String> originalLore = getStoredEnchantLore();
-        int enchantLineSize = originalLore.size();
-        originalLore.addAll(getLore());
-        
-        List<String> realLore = new ArrayList<>(Objects.requireNonNullElse(getHandledMeta().getLore(), new ArrayList<>()));
-        
+        ItemMeta meta = this.getHandledMeta();
+
+        List<Component> savedLore;
+        int enchantLineSize;
+
+        {
+            List<String> enchantLoreData = getLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY);
+            List<String> originalLoreData = getLoreData(meta, NamespacedKeyManager.LORE_KEY);
+
+            savedLore = new ArrayList<>(enchantLoreData.size() + originalLoreData.size());
+            savedLore.addAll(fromJson(enchantLoreData));
+            savedLore.addAll(fromJson(originalLoreData));
+
+            enchantLineSize = enchantLoreData.size();
+        }
+
+        List<Component> realLore;
+
+        {
+            List<Component> lore = meta.lore();
+            realLore = lore != null ? new ArrayList<>(lore) : new ArrayList<>();
+        }
+
         // Add operation.
         boolean isAddOperation = true;
-        for (int i = 0; i < originalLore.size(); i++) {
-            String originalLine = originalLore.get(i);
+        for (int i = 0; i < savedLore.size(); i++) {
             if (realLore.size() <= i) {
                 isAddOperation = false;
                 break;
             }
-            String realLine = realLore.get(i);
-            if (!originalLine.equals(realLine)) {
+            Component savedLine = savedLore.get(i);
+            Component realLine = realLore.get(i);
+            if (!savedLine.equals(realLine)) {
                 isAddOperation = false;
                 break;
             }
         }
+
         if (isAddOperation) {
-            if (originalLore.size() != 0) {
-                originalLore.addAll(realLore.subList(originalLore.size(), realLore.size()));
-                setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+            if (savedLore.isEmpty()) {
+                this.setOriginalLore(meta, Collections.emptyList());
             } else {
-                setLore(Collections.emptyList());
+                savedLore.addAll(realLore.subList(savedLore.size(), realLore.size()));
+                this.setOriginalLore(meta, savedLore.subList(enchantLineSize, savedLore.size()));
             }
             return;
         }
 
         // Set or remove operation.
-
-        while (realLore.size() < originalLore.size()) {
+        while (realLore.size() < savedLore.size()) {
             realLore.add(null);
         }
-        while (originalLore.size() < realLore.size() + enchantLineSize) {
-            originalLore.add(null);
+        while (savedLore.size() < realLore.size() + enchantLineSize) {
+            savedLore.add(null);
         }
-        
+
         for (int i = realLore.size() - 1; i >= 0; i--) {
-            String realLine = realLore.get(i);
-            String originalLine = originalLore.get(i);
-            if (!Objects.equals(originalLine, realLine)) {
-                originalLore.set(i + enchantLineSize, realLine);
+            Component savedLine = savedLore.get(i);
+            Component realLine = realLore.get(i);
+
+            if (!Objects.equals(savedLine, realLine)) {
+                savedLore.set(i + enchantLineSize, realLine);
             }
         }
 
-        ListIterator<String> originalLoreIt = originalLore.listIterator(originalLore.size());
+        ListIterator<Component> originalLoreIt = savedLore.listIterator(savedLore.size());
         while (originalLoreIt.hasPrevious()) {
             if (originalLoreIt.previous() == null) {
                 originalLoreIt.remove();
@@ -195,34 +201,42 @@ public class LocalItemStack {
                 break;
             }
         }
-        originalLore.replaceAll(line -> line == null ? "" : line);
 
-        setLore(originalLore.subList(enchantLineSize, originalLore.size()));
+        savedLore.replaceAll(line -> line == null ? Component.empty() : line);
+        this.setOriginalLore(meta, savedLore.subList(enchantLineSize, savedLore.size()));
     }
 
-    private List<String> createEnchantLore() {
-        List<String> enchantLore = new ArrayList<>();
+    private List<Component> createEnchantLore() {
+        if (this.enchantPlusData.enchantments.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-        List<EnchantPlus> enchants = new ArrayList<>(enchantPlusData.enchantments.keySet());
+        List<Map.Entry<EnchantPlus, Integer>> entries = new ArrayList<>(this.enchantPlusData.enchantments.entrySet());
+        entries.sort(Comparator.comparing(entry -> entry.getKey().getId()));
 
-        if (!enchants.isEmpty()) {
-            enchants.sort(Comparator.comparing(EnchantPlus::getId));
-            List<String> tooltips = new ArrayList<>();
+        boolean tooltipEnabled = this.plugin.getMainConfig().getGeneralConfig().isHelpfulTooltipsEnabled();
+        int size = entries.size();
+        List<Component> enchantLore = new ArrayList<>(tooltipEnabled ? size + 1 + size : size); // enchants + empty line + tooltips or enchants only
+        List<Component> toolTips = tooltipEnabled ? new ArrayList<>(size) : Collections.emptyList();
 
-            for (EnchantPlus enchant : enchants) {
-                int level = enchantPlusData.enchantments.get(enchant);
+        for (Map.Entry<EnchantPlus, Integer> entry : entries) {
+            EnchantPlus enchant = entry.getKey();
+            int level = entry.getValue();
+            Component component = plugin.getMainConfig().getBy(enchant).displayName();
+            TextColor color = enchant.isCursed() ? NamedTextColor.RED : NamedTextColor.GRAY;
 
-                String enchantDisplayName = plugin.getMainConfig().getBy(enchant).getDisplayName();
-                ChatColor color = (enchant.isCursed() ? ChatColor.RED : ChatColor.GRAY);
-                enchantLore.add(color + enchantDisplayName + " " + color + EnchantAPI.getLevelSymbol(level) + color);
-                tooltips.add(plugin.getTooltipsConfig().getTooltip(enchant));
-            }
+            enchantLore.add(Component.text().append(component, Component.space(), Component.text(EnchantAPI.getLevelSymbol(level)).color(color)).build());
 
-            if (plugin.getMainConfig().getGeneralConfig().isHelpfulTooltipsEnabled()) {
-                enchantLore.add("");
-                enchantLore.addAll(tooltips);
+            if (tooltipEnabled) {
+                toolTips.add(this.plugin.getTooltipsConfig().getTooltip(enchant));
             }
         }
+
+        if (tooltipEnabled) {
+            enchantLore.add(Component.empty());
+            enchantLore.addAll(toolTips);
+        }
+
         return enchantLore;
     }
 
@@ -365,6 +379,42 @@ public class LocalItemStack {
     @Override
     public LocalItemStack clone() {
         return plugin.wrapItem(handle.clone());
+    }
+
+    private static @NotNull List<String> getLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key) {
+        return meta.getPersistentDataContainer().getOrDefault(key, PersistentDataType.LIST.strings(), Collections.emptyList());
+    }
+
+    private static void setLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key, @NotNull List<String> loreData) {
+        meta.getPersistentDataContainer().set(key, PersistentDataType.LIST.strings(), loreData);
+    }
+
+    private static @NotNull List<String> toJson(@Nullable Collection<Component> components) {
+        if (components == null || components.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<String> result = new ArrayList<>(components.size());
+
+        for (Component component : components) {
+            result.add(GsonComponentSerializer.gson().serialize(component));
+        }
+
+        return result;
+    }
+
+    private static @NotNull List<Component> fromJson(@NotNull List<String> jsons) {
+        if (jsons.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Component> result = new ArrayList<>(jsons.size());
+
+        for (String json : jsons) {
+            result.add(GsonComponentSerializer.gson().deserialize(json));
+        }
+
+        return result;
     }
 
 }

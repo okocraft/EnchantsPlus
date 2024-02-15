@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.GrindstoneInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,15 +23,13 @@ public class GrindstoneListener implements Listener {
         if (!(topInv instanceof GrindstoneInventory grindstoneInventory)) {
             return;
         }
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                LocalItemStack result = plugin.wrapItem(grindstoneInventory.getItem(2));
-                if (result != null) {
-                    result.useGrindstone();
-                    grindstoneInventory.setItem(2, result.getItem());
-                }
+
+        event.getWhoClicked().getScheduler().run(this.plugin, task -> {
+            LocalItemStack result = this.plugin.wrapItem(grindstoneInventory.getItem(2));
+            if (result != null) {
+                result.useGrindstone();
+                grindstoneInventory.setItem(2, result.getItem());
             }
-        }.runTask(plugin);
+        }, null);
     }
 }

@@ -1,9 +1,9 @@
 package net.okocraft.enchantsplus.config;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class Tooltips extends CustomConfig {
     
@@ -15,8 +15,8 @@ public class Tooltips extends CustomConfig {
         return get().getString("prefix");
     }
 
-    public String getTooltip(EnchantPlus enchant) {
-        return ChatColor.translateAlternateColorCodes('&', getPrefix() + get().getString("tooltips." + enchant.getId()));
+    public Component getTooltip(EnchantPlus enchant) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(getPrefix() + get().getString("tooltips." + enchant.getId()));
     }
 
 }

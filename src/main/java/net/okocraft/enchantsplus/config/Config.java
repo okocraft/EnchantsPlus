@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
 
@@ -229,6 +231,10 @@ public class Config extends CustomConfig {
 
         public String getDisplayName() {
             return ChatColor.stripColor(get().getString(path("display-name"), type.getId()));
+        }
+
+        public Component displayName() { // FIXME: getDisplayName
+            return LegacyComponentSerializer.legacyAmpersand().deserialize(get().getString(path("display-name"), type.getId()));
         }
 
         public int getEnchantChance() {

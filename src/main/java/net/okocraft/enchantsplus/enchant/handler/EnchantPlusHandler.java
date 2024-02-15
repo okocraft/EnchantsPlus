@@ -50,7 +50,7 @@ public abstract class EnchantPlusHandler<C extends EnchantConfig, T extends Even
         return item != null && item.getType() != Material.ENCHANTED_BOOK && item.hasCustomEnchant(config.getType());
     }
 
-    protected PlayerItemDamageEvent callItemDamageEvent(Player player, ItemStack what, int damage) {
+    protected PlayerItemDamageEvent callItemDamageEvent(Player player, ItemStack what, int originalDamage) {
         if (player.getGameMode() == GameMode.CREATIVE) {
             return null;
         }
@@ -59,9 +59,9 @@ public abstract class EnchantPlusHandler<C extends EnchantConfig, T extends Even
             return null;
         }
 
-        damage = reduceDamageWithUnbreaking(what, damage);
+        int damage = reduceDamageWithUnbreaking(what, originalDamage);
 
-        PlayerItemDamageEvent event = new PlayerItemDamageEvent(player, what, damage);
+        PlayerItemDamageEvent event = new PlayerItemDamageEvent(player, what, damage, originalDamage);
         plugin.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return event;
