@@ -28,12 +28,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LocalItemStack {
-
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     private final EnchantsPlus plugin;
 
@@ -52,8 +51,8 @@ public class LocalItemStack {
                 CustomDataTypes.ENCHANT_PLUS_DATA,
                 new EnchantPlusData(new HashMap<>())
         );
-        if (!container.has(NamespacedKeyManager.LORE_KEY, CustomDataTypes.STRING_ARRAY)
-                || !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, CustomDataTypes.STRING_ARRAY)) {
+        if (!container.has(NamespacedKeyManager.LORE_KEY, PersistentDataType.LIST.strings()) ||
+                !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, PersistentDataType.LIST.strings())) {
             this.setOriginalLore(meta, handle.lore());
         }
     }
@@ -121,11 +120,11 @@ public class LocalItemStack {
     }
 
     public int calculateOriginalLoreLines() {
-        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.LORE_KEY).length;
+        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.LORE_KEY).size();
     }
 
     public int calculateEnchantLoreLines() {
-        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.ENCHANT_LORE_KEY).length;
+        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.ENCHANT_LORE_KEY).size();
     }
 
     public void fixLore() {
@@ -135,13 +134,14 @@ public class LocalItemStack {
         int enchantLineSize;
 
         {
-            String[] enchantLoreData = getLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY);
-            String[] originalLoreData = getLoreData(meta, NamespacedKeyManager.LORE_KEY);
+            List<String> enchantLoreData = getLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY);
+            List<String> originalLoreData = getLoreData(meta, NamespacedKeyManager.LORE_KEY);
 
-            savedLore = new ArrayList<>(enchantLoreData.length + originalLoreData.length);
+            savedLore = new ArrayList<>(enchantLoreData.size() + originalLoreData.size());
             savedLore.addAll(fromJson(enchantLoreData));
             savedLore.addAll(fromJson(originalLoreData));
-            enchantLineSize = enchantLoreData.length;
+
+            enchantLineSize = enchantLoreData.size();
         }
 
         List<Component> realLore;
@@ -381,35 +381,34 @@ public class LocalItemStack {
         return plugin.wrapItem(handle.clone());
     }
 
-    private static @NotNull String @NotNull [] getLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key) {
-        return meta.getPersistentDataContainer().getOrDefault(key, CustomDataTypes.STRING_ARRAY, EMPTY_STRING_ARRAY);
+    private static @NotNull List<String> getLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key) {
+        return meta.getPersistentDataContainer().getOrDefault(key, PersistentDataType.LIST.strings(), Collections.emptyList());
     }
 
-    private static void setLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key, @NotNull String @NotNull [] loreData) {
-        meta.getPersistentDataContainer().set(key, CustomDataTypes.STRING_ARRAY, loreData);
+    private static void setLoreData(@NotNull ItemMeta meta, @NotNull NamespacedKey key, @NotNull List<String> loreData) {
+        meta.getPersistentDataContainer().set(key, PersistentDataType.LIST.strings(), loreData);
     }
 
-    private static @NotNull String[] toJson(@Nullable Collection<Component> components) {
+    private static @NotNull List<String> toJson(@Nullable Collection<Component> components) {
         if (components == null || components.isEmpty()) {
-            return EMPTY_STRING_ARRAY;
+            return Collections.emptyList();
         }
 
-        String[] result = new String[components.size()];
-        int index = 0;
+        List<String> result = new ArrayList<>(components.size());
 
         for (Component component : components) {
-            result[index++] = GsonComponentSerializer.gson().serialize(component);
+            result.add(GsonComponentSerializer.gson().serialize(component));
         }
 
         return result;
     }
 
-    private static @NotNull List<Component> fromJson(@NotNull String @NotNull [] jsons) {
-        if (jsons.length == 0) {
+    private static @NotNull List<Component> fromJson(@NotNull List<String> jsons) {
+        if (jsons.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<Component> result = new ArrayList<>(jsons.length);
+        List<Component> result = new ArrayList<>(jsons.size());
 
         for (String json : jsons) {
             result.add(GsonComponentSerializer.gson().deserialize(json));

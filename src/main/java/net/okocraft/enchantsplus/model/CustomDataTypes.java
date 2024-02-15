@@ -53,41 +53,4 @@ public class CustomDataTypes {
             return new EnchantPlusData(enchantments);
         }
     };
-
-    public static final PersistentDataType<PersistentDataContainer[], String[]> STRING_ARRAY = new PersistentDataType<>(){
-
-        @Override
-        public Class<PersistentDataContainer[]> getPrimitiveType() {
-            return PersistentDataContainer[].class;
-        }
-
-        @Override
-        public Class<String[]> getComplexType() {
-            return String[].class;
-        }
-
-        @Override
-        public PersistentDataContainer[] toPrimitive(String[] complex, PersistentDataAdapterContext context) {
-            PersistentDataContainer[] result = new PersistentDataContainer[complex.length];
-            PersistentDataContainer element;
-            for (int i = 0; i < complex.length; i++) {
-                element = context.newPersistentDataContainer();
-                element.set(NamespacedKeyManager.TEXT_KEY, STRING, complex[i]);
-                result[i] = element;
-            }
-            return result;
-        }
-
-        @Override
-        public String[] fromPrimitive(PersistentDataContainer[] primitive, PersistentDataAdapterContext context) {
-            String[] result = new String[primitive.length];
-            for (int i = 0; i < primitive.length; i++) {
-                result[i] = primitive[i].get(NamespacedKeyManager.TEXT_KEY, STRING);
-            }
-            return result;
-        }
-
-    };
-
-
 }
