@@ -1,5 +1,6 @@
 package net.okocraft.enchantsplus.enchant.handler;
 
+import io.papermc.paper.util.Tick;
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.config.Config.BowActivatableEnchantConfig;
 import net.okocraft.enchantsplus.config.Config.BowEnchantConfig;
@@ -10,10 +11,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class ArrowEnchantHandler<C extends BowEnchantConfig>
         extends EnchantPlusHandler<C, ProjectileHitEvent> {
+
+    private static final long TRAILING_PARTICLE_EXPIRES = Tick.of(48L).toNanos();
 
     public ArrowEnchantHandler(EnchantsPlus plugin, C config) {
         super(plugin, config);
@@ -46,22 +48,14 @@ public abstract class ArrowEnchantHandler<C extends BowEnchantConfig>
 
         Particle trailingParticle = getTrailingParticle();
         if (trailingParticle != null && plugin.getMainConfig().getGeneralConfig().isParticlesEnabled()) {
-
-            new BukkitRunnable() {
-                // a minute.
-                long expireTick = 240L;
-
-                @Override
-                public void run() {
-                    expireTick -= 5L;
-                    if (expireTick < 0 || projectile.isDead() || projectile.getVelocity().length() < 0.005D) {
-                        cancel();
-                    } else {
-                        projectile.getWorld().spawnParticle(getTrailingParticle(), projectile.getLocation(), 5, 0.1F,
-                                0.1F, 0.1F, 0.05F);
-                    }
+            long expires = System.nanoTime() + TRAILING_PARTICLE_EXPIRES;
+            projectile.getScheduler().runAtFixedRate(this.plugin, task -> {
+                if (expires < System.nanoTime() || projectile.isDead() || projectile.getVelocity().lengthSquared() < 0.000025D) {
+                    task.cancel();
+                } else {
+                    projectile.getWorld().spawnParticle(this.getTrailingParticle(), projectile.getLocation(), 5, 0.1F, 0.1F, 0.1F, 0.05F);
                 }
-            }.runTaskTimer(plugin, 0, 1L);
+            }, null, 1L, 1L);
         }
 
         projectile.setMetadata("enchantplus_" + config.getType().getId(),
