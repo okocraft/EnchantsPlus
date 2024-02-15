@@ -317,8 +317,7 @@ public class MainListener implements Listener {
         }
 
         if (args.length == 2) {
-            List<String> completion = IntStream.rangeClosed(1, handItem.getLore().size())
-                    .boxed().map(String::valueOf).toList();
+            List<String> completion = IntStream.rangeClosed(1, handItem.calculateOriginalLoreLines()).mapToObj(Integer::toString).toList();
             event.setCompletions(StringUtil.copyPartialMatches(args[1], completion, new ArrayList<>()));
             return;
         }
@@ -330,7 +329,7 @@ public class MainListener implements Listener {
             return;
         }
         
-        int enchantLoreLines = handItem.getStoredEnchantLore().size();
+        int enchantLoreLines = handItem.calculateEnchantLoreLines();
         args[1] = String.valueOf(loreLineIndex + enchantLoreLines);
         
         try {
