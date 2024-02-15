@@ -38,8 +38,8 @@ import net.okocraft.enchantsplus.enchant.handler.WellFed;
 import net.okocraft.enchantsplus.enchant.handler.WitheringArrow;
 import net.okocraft.enchantsplus.enchant.handler.Withering;
 import net.okocraft.enchantsplus.enchant.handler.XPBoost;
-import net.okocraft.enchantsplus.event.MainTimerTickEvent;
 import net.okocraft.enchantsplus.event.PlayerTickEvent;
+import net.okocraft.enchantsplus.model.EnchantsPlusPlayer;
 import net.okocraft.enchantsplus.model.LocalItemStack;
 
 import java.util.ArrayList;
@@ -62,6 +62,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.server.TabCompleteEvent;
@@ -149,6 +150,12 @@ public class MainListener implements Listener {
         this.witheringArrowHandler = new WitheringArrow(plugin);
         this.witheringHandler = new Withering(plugin);
         this.xpBoostHandler = new XPBoost(plugin);
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        EnchantsPlusPlayer player = new EnchantsPlusPlayer(event.getPlayer().getUniqueId()); // TODO: add methods to get this player
+        event.getPlayer().getScheduler().runAtFixedRate(this.plugin, task -> player.tick(), null, 1L, 1L);
     }
 
     @EventHandler
@@ -261,27 +268,24 @@ public class MainListener implements Listener {
         plugin.getPlayerData().clearCache();
     }
 
-    private int timer = 0;
     @EventHandler
-    public void updateLore(MainTimerTickEvent event) {
-        timer++;
-        if (timer < 20) {
+    public void updateLore(PlayerTickEvent event) {
+        if (event.getTickCount() % 20 != 0) {
             return;
         }
-        timer = 0;
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            for (EquipmentSlot slot : EquipmentSlot.values()) {
-                ItemStack item = player.getInventory().getItem(slot);
-                LocalItemStack localItem = plugin.wrapItem(item);
-                if (localItem == null || localItem.getCustomEnchants().isEmpty()) {
-                    continue;
-                }
-                localItem.fixLore();
-                ItemStack fixed = localItem.getItem();
-                if (!item.equals(fixed)) {
-                    player.getInventory().setItem(slot, fixed);
-                }
+        Player player = event.getPlayer();
+
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack item = player.getInventory().getItem(slot);
+            LocalItemStack localItem = plugin.wrapItem(item);
+            if (localItem == null || localItem.getCustomEnchants().isEmpty()) {
+                continue;
+            }
+            localItem.fixLore();
+            ItemStack fixed = localItem.getItem();
+            if (!item.equals(fixed)) {
+                player.getInventory().setItem(slot, fixed);
             }
         }
     }

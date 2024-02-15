@@ -11,20 +11,16 @@ import net.okocraft.enchantsplus.config.Languages;
 import net.okocraft.enchantsplus.config.PlayerData;
 import net.okocraft.enchantsplus.config.Tooltips;
 import net.okocraft.enchantsplus.enchant.EnchantAPI;
-import net.okocraft.enchantsplus.event.MainTimerTickEvent;
-import net.okocraft.enchantsplus.event.PlayerTickEvent;
 import net.okocraft.enchantsplus.listener.AnvilListener;
 import net.okocraft.enchantsplus.listener.GrindstoneListener;
 import net.okocraft.enchantsplus.listener.MainListener;
 import net.okocraft.enchantsplus.model.LocalItemStack;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -62,17 +58,6 @@ public class EnchantsPlus extends JavaPlugin {
     public void onEnable() {
         this.commands = new Commands(this);
         reload();
-
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                getServer().getPluginManager().callEvent(new MainTimerTickEvent());
-                for (Player player : getServer().getOnlinePlayers()) {
-                    getServer().getPluginManager().callEvent(new PlayerTickEvent(player));
-                }
-            }
-        }.runTaskTimer(this, 1, 1);
-
         getLogger().info("Done!");
     }
 
