@@ -538,18 +538,7 @@ public final class Languages {
         languages.values().forEach(Language::reload);
     }
 
-
-    private final String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     String getLocale(CommandSender sender) {
-        if (sender instanceof Player) {
-            if (version.compareTo("v1_12") >= 0 && !version.startsWith("v1_11")) {
-                return ((Player) sender).getLocale();
-            } else {
-                return defaultLanguage.get();
-            }
-        } else {
-            return defaultLanguage.get();
-        }
+        return sender instanceof Player player ? player.locale().toString() : defaultLanguage.get();
     }
-
 }
