@@ -24,8 +24,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.helpers.NOPLogger;
 
 public class EnchantsPlus extends JavaPlugin {
+
+    private static Logger logger = NOPLogger.NOP_LOGGER;
+
+    public static @NotNull Logger logger() {
+        return EnchantsPlus.logger;
+    }
 
     private static EnchantsPlus instance;
 
