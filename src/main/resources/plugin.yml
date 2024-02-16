@@ -2,7 +2,7 @@ name: EnchantsPlus
 main: net.okocraft.enchantsplus.EnchantsPlus
 version: "${project.version}"
 api-version: 1.18
-softdepend: [ "WorldGuard", "VeinMiner", "AAC", "SpartanAPI", "Feudal", "Vault", "PlayerPoints", "NoCheatPlus", "Essentials" ]
+softdepend: [ "WorldGuard", "VeinMiner", "Vault", "PlayerPoints", "NoCheatPlus", "Essentials" ]
 commands:
   enchantsplus:
     aliases: ["enchants", "ep"]
