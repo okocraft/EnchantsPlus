@@ -1,7 +1,6 @@
 package net.okocraft.enchantsplus.enchant.handler;
 
 import net.okocraft.enchantsplus.EnchantsPlus;
-import net.okocraft.enchantsplus.bridge.nocheatplus.CheckType;
 import net.okocraft.enchantsplus.config.Config.ExcavationConfig;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
 import net.okocraft.enchantsplus.enchant.EnchantmentTarget;
@@ -61,7 +60,7 @@ public class Excavation extends EnchantPlusHandler<ExcavationConfig, BlockBreakE
                 event.setCancelled(true);
             }
             if (excavatedBlocks.isEmpty()) {
-                plugin.getBridgeManager().getNoCheatPlusBridge().unexempt(event.getPlayer(), CheckType.BLOCKBREAK);
+                plugin.getBridgeManager().getNoCheatPlusBridge().unexemptBlockBreak(event.getPlayer());
             }
 
             return;
@@ -79,7 +78,7 @@ public class Excavation extends EnchantPlusHandler<ExcavationConfig, BlockBreakE
             return;
         }
 
-        plugin.getBridgeManager().getNoCheatPlusBridge().exempt(user, CheckType.BLOCKBREAK);
+        plugin.getBridgeManager().getNoCheatPlusBridge().exemptBlockBreak(user);
 
         BlockFace playerFace = user.getFacing();
         float pitch = user.getLocation().getPitch();

@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface NoCheatPlusBridge {
 
-    void exempt(@NotNull Player player, @NotNull CheckType type);
+    default void exemptBlockBreak(@NotNull Player player) {
+    }
 
-    void unexempt(@NotNull Player player, @NotNull CheckType type);
+    default void unexemptBlockBreak(@NotNull Player player) {
+    }
 }

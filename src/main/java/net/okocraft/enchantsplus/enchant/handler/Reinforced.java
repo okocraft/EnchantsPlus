@@ -1,7 +1,6 @@
 package net.okocraft.enchantsplus.enchant.handler;
 
 import net.okocraft.enchantsplus.EnchantsPlus;
-import net.okocraft.enchantsplus.bridge.nocheatplus.CheckType;
 import net.okocraft.enchantsplus.config.Config.ReinforcedConfig;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
 import net.okocraft.enchantsplus.model.LocalItemStack;
@@ -41,12 +40,12 @@ public class Reinforced extends EnchantPlusHandler<ReinforcedConfig, BlockDamage
 
         int level = handItem.getCustomEnchantLevel(EnchantPlus.REINFORCED);
 
-        plugin.getBridgeManager().getNoCheatPlusBridge().exempt(user, CheckType.BLOCKBREAK);
+        plugin.getBridgeManager().getNoCheatPlusBridge().exemptBlockBreak(user);
         user.breakBlock(block);
         if (config.getUnbreakingRate(level) < random.nextDouble()) {
             callItemDamageEvent(user, handItem.getItem(), config.getDurabilityCost() - 1);
         }
-        plugin.getBridgeManager().getNoCheatPlusBridge().unexempt(user, CheckType.BLOCKBREAK);
+        plugin.getBridgeManager().getNoCheatPlusBridge().unexemptBlockBreak(user);
     }
 
     private static boolean isReinforcedTarget(Material type) {
