@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-public class WorldGuardBridgeVoid implements WorldGuardBridge {
+class WorldGuardBridgeVoid implements WorldGuardBridge {
 
     @Override
     public boolean canAttack(@NotNull Player player) {

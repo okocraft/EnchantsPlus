@@ -1,5 +1,6 @@
 package net.okocraft.enchantsplus.bridge.worldguard;
 
+import net.okocraft.enchantsplus.bridge.BridgeHolder;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
 
 import java.util.List;
@@ -11,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 public interface WorldGuardBridge {
+
+    String NAME = "WorldGuard";
+
+    static @NotNull BridgeHolder<WorldGuardBridge> createHolder() {
+        return new WorldGuardBridgeHolder();
+    }
 
     boolean canAttack(@NotNull Player player);
 

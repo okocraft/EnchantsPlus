@@ -1,10 +1,7 @@
 package net.okocraft.enchantsplus;
 
-import net.okocraft.enchantsplus.listener.NewEnchantListener;
-
+import lombok.Getter;
 import net.okocraft.enchantsplus.bridge.BridgeManager;
-import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridgeImpl;
-import net.okocraft.enchantsplus.bridge.vault.VaultBridgeImpl;
 import net.okocraft.enchantsplus.command.Commands;
 import net.okocraft.enchantsplus.config.Config;
 import net.okocraft.enchantsplus.config.Languages;
@@ -14,15 +11,13 @@ import net.okocraft.enchantsplus.enchant.EnchantAPI;
 import net.okocraft.enchantsplus.listener.AnvilListener;
 import net.okocraft.enchantsplus.listener.GrindstoneListener;
 import net.okocraft.enchantsplus.listener.MainListener;
+import net.okocraft.enchantsplus.listener.NewEnchantListener;
 import net.okocraft.enchantsplus.model.LocalItemStack;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.helpers.NOPLogger;
@@ -45,26 +40,32 @@ public class EnchantsPlus extends JavaPlugin {
     private final PlayerData playerData = new PlayerData(this);
     @Getter
     private final Tooltips tooltipsConfig = new Tooltips(this);
-    
+
     @Getter
     private final EnchantAPI enchantAPI = new EnchantAPI(this);
-    
+
     @Getter
-    private final BridgeManager bridgeManager = new BridgeManager(this);
+    private final BridgeManager bridgeManager = new BridgeManager();
 
     @Getter
     private Commands commands;
 
     @Getter
     private MainListener mainListener;
-    
+
     public void onLoad() {
+        logger = this.getSLF4JLogger();
         instance = this;
-        bridgeManager.hookWorldGuardBridge();
+
+        this.bridgeManager.hookWorldGuardBridge();
     }
 
     public void onEnable() {
         this.commands = new Commands(this);
+
+        logger.info("Loading available bridges...");
+        this.bridgeManager.loadBridges(this);
+
         reload();
         getLogger().info("Done!");
     }
@@ -74,10 +75,7 @@ public class EnchantsPlus extends JavaPlugin {
 
     public void reload() {
         reloadConfig();
-
-        bridgeManager.loadBridges();
-        getLogger().info("Loaded configs and assigned plugin bridge instances.");
-        
+        getLogger().info("Loaded configs.");
         final PluginManager pluginManager = getServer().getPluginManager();
         HandlerList.unregisterAll(this);
         this.mainListener = new MainListener(this);
@@ -87,11 +85,6 @@ public class EnchantsPlus extends JavaPlugin {
         pluginManager.registerEvents(new GrindstoneListener(this), this);
 
         getLogger().info("Registered events.");
-
-        if (bridgeManager.getVaultBridge() instanceof VaultBridgeImpl
-                || bridgeManager.getPlayerPointsBridge() instanceof PlayerPointsBridgeImpl) {
-            getLogger().info("Detected Vault or PlayerPoints (or both).");
-        }
     }
 
     public LocalItemStack wrapItem(ItemStack item) {

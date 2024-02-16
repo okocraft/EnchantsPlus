@@ -14,7 +14,6 @@ import com.sk89q.worldguard.protection.flags.StateFlag.State;
 import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.flags.registry.FlagConflictException;
 import com.sk89q.worldguard.protection.regions.GlobalProtectedRegion;
-import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,12 +26,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class WorldGuardBridgeImpl implements WorldGuardBridge {
+class WorldGuardBridgeImpl implements WorldGuardBridge {
 
-    @Getter
     private final StringFlag disabledCustomEnchantsFlag;
 
-    public WorldGuardBridgeImpl() {
+    WorldGuardBridgeImpl() {
         disabledCustomEnchantsFlag = registerFlag(new StringFlag("disabled-custom-enchants"));
     }
 

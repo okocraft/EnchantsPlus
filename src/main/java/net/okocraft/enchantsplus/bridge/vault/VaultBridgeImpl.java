@@ -1,22 +1,13 @@
 package net.okocraft.enchantsplus.bridge.vault;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 
-import lombok.Getter;
+class VaultBridgeImpl implements VaultBridge {
 
-public class VaultBridgeImpl implements VaultBridge {
+    private final Economy eco;
 
-    @Getter
-    private final @NotNull Economy eco;
-
-    public VaultBridgeImpl() {
-        RegisteredServiceProvider<Economy> serviceProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
-        if (serviceProvider == null) {
-            throw new NoClassDefFoundError("Vault is not installed.");
-        }
-        this.eco = serviceProvider.getProvider();
+    VaultBridgeImpl(@NotNull Economy economy) {
+        this.eco = economy;
     }
 }

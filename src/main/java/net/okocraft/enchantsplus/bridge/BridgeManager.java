@@ -2,179 +2,89 @@ package net.okocraft.enchantsplus.bridge;
 
 import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.bridge.nocheatplus.NoCheatPlusBridge;
-import net.okocraft.enchantsplus.bridge.nocheatplus.NoCheatPlusBridgeImpl;
-import net.okocraft.enchantsplus.bridge.nocheatplus.NoCheatPlusBridgeVoid;
 import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridge;
-import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridgeImpl;
-import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridgeVoid;
 import net.okocraft.enchantsplus.bridge.vault.VaultBridge;
-import net.okocraft.enchantsplus.bridge.vault.VaultBridgeImpl;
-import net.okocraft.enchantsplus.bridge.vault.VaultBridgeVoid;
 import net.okocraft.enchantsplus.bridge.veinminer.VeinMinerBridge;
-import net.okocraft.enchantsplus.bridge.veinminer.VeinMinerBridgeImpl;
-import net.okocraft.enchantsplus.bridge.veinminer.VeinMinerBridgeVoid;
 import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridge;
-import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeImpl;
-import net.okocraft.enchantsplus.bridge.worldguard.WorldGuardBridgeVoid;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.PluginManager;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-import java.util.logging.Logger;
+import java.util.Map;
 
 public class BridgeManager implements Listener {
 
-    private final EnchantsPlus plugin;
+    // WorldGuard's bridge needs registering flags when the plugin is loading.
+    private final BridgeHolder<WorldGuardBridge> worldGuardBridgeHolder = WorldGuardBridge.createHolder();
 
-    private final Logger log;
-    private final PluginManager pm;
+    // Vault's Economy is an interface, so we cannot detect reloading of an implementation correctly.
+    private final BridgeHolder<VaultBridge> vaultBridgeHolder = VaultBridge.createHolder();
 
-    private NoCheatPlusBridge noCheatPlusBridge;
-
-    private PlayerPointsBridge playerPointsBridge;
-
-    private VaultBridge vaultBridge;
-
-    private VeinMinerBridge veinMinerBridge;
-
-    private WorldGuardBridge worldguardBridge;
-
-    public BridgeManager(EnchantsPlus plugin) {
-        this.plugin = plugin;
-        this.log = plugin.getLogger();
-        this.pm = plugin.getServer().getPluginManager();
-    }
+    // These bridges can be loaded/unloaded while the server is running. Currently, PluginEnableEvent and PluginDisableEvent do so.
+    private final Map<String, BridgeHolder<?>> bridgeMap = Map.of(
+            NoCheatPlusBridge.NAME, NoCheatPlusBridge.createHolder(),
+            PlayerPointsBridge.NAME, PlayerPointsBridge.createHolder(),
+            VeinMinerBridge.NAME, VeinMinerBridge.createHolder()
+    );
 
     @EventHandler
     public void onPluginEnable(PluginEnableEvent event) {
-        if (event.getPlugin().getName().equals("Vault")) {
-            this.vaultBridge = newVaultBridge();
-        }
-
-        if (event.getPlugin().getName().equals("PlayerPoints")) {
-            this.playerPointsBridge = newPlayerPointsBridge();
-        }
-
-        if (event.getPlugin().getName().equals("NoCheatPlus")) {
-            this.noCheatPlusBridge = newNoCheatPlusBridge();
-        }
-
-        if (event.getPlugin().getName().equals("VeinMiner")) {
-            this.veinMinerBridge = newVeinMinerBridge();
+        if (this.bridgeMap.get(event.getPlugin().getName()) instanceof PluginBridgeHolder<?> holder) {
+            this.loadBridge(holder);
         }
     }
 
     @EventHandler
     public void onPluginDisable(PluginDisableEvent event) {
-        if (event.getPlugin().getName().equals("WorldGuard")) {
-            this.worldguardBridge = new WorldGuardBridgeVoid();
-        }
-
-        if (event.getPlugin().getName().equals("Vault")) {
-            this.vaultBridge = new VaultBridgeImpl();
-        }
-
-        if (event.getPlugin().getName().equals("PlayerPoints")) {
-            this.playerPointsBridge = new PlayerPointsBridgeVoid();
-        }
-
-        if (event.getPlugin().getName().equals("NoCheatPlus")) {
-            this.noCheatPlusBridge = new NoCheatPlusBridgeVoid();
-        }
-
-        if (event.getPlugin().getName().equals("VeinMiner")) {
-            this.veinMinerBridge = new VeinMinerBridgeVoid();
+        if (this.bridgeMap.get(event.getPlugin().getName()) instanceof PluginBridgeHolder<?> holder) {
+            holder.unloadBridge();
+            EnchantsPlus.logger().info("A bridge for '{}' is unloaded due to the plugin being disabled.", holder.getName());
         }
     }
 
-    public void loadBridges() {
-        this.noCheatPlusBridge = newNoCheatPlusBridge();
-        this.playerPointsBridge = newPlayerPointsBridge();
-        this.vaultBridge = newVaultBridge();
-        this.veinMinerBridge = newVeinMinerBridge();
+    public void loadBridges(@NotNull EnchantsPlus plugin) {
+        this.loadBridge(this.vaultBridgeHolder);
+        this.bridgeMap.values().forEach(this::loadBridge);
 
         HandlerList.unregisterAll(this);
-        pm.registerEvents(this, plugin);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     public void hookWorldGuardBridge() {
-        try {
-            this.worldguardBridge = new WorldGuardBridgeImpl();
-        } catch (NoClassDefFoundError | IllegalStateException e) {
-            log.info("WorldGuard is not available. Ignored.");
-            this.worldguardBridge = new WorldGuardBridgeVoid();
-        }
-    }
-
-    private VaultBridge newVaultBridge() {
-        try {
-            if (!pm.isPluginEnabled("Vault")) {
-                throw new NoClassDefFoundError();
-            }
-            return new VaultBridgeImpl();
-        } catch (NoClassDefFoundError e) {
-            log.info("Vault is not installed. Ignored.");
-            return new VaultBridgeVoid();
-        }
-    }
-
-    private PlayerPointsBridge newPlayerPointsBridge() {
-        try {
-            if (!pm.isPluginEnabled("PlayerPoints")) {
-                throw new NoClassDefFoundError();
-            }
-            return new PlayerPointsBridgeImpl();
-        } catch (NoClassDefFoundError e) {
-            log.info("PlayerPoints is not installed. Ignored.");
-            return new PlayerPointsBridgeVoid();
-        }
-    }
-
-    private NoCheatPlusBridge newNoCheatPlusBridge() {
-        try {
-            if (!pm.isPluginEnabled("NoCheatPlus")) {
-                throw new NoClassDefFoundError();
-            }
-            return new NoCheatPlusBridgeImpl();
-        } catch (NoClassDefFoundError e) {
-            log.info("NoCheatPlus is not installed. Ignored.");
-            return new NoCheatPlusBridgeVoid();
-        }
-    }
-
-    private VeinMinerBridge newVeinMinerBridge() {
-        try {
-            if (!pm.isPluginEnabled("VeinMiner")) {
-                throw new NoClassDefFoundError();
-            }
-            return new VeinMinerBridgeImpl();
-        } catch (NoClassDefFoundError e) {
-            log.info("VeinMiner is not installed. Ignored.");
-            return new VeinMinerBridgeVoid();
-        }
+        this.loadBridge(this.worldGuardBridgeHolder);
     }
 
     public NoCheatPlusBridge getNoCheatPlusBridge() {
-        return Objects.requireNonNullElseGet(this.noCheatPlusBridge, NoCheatPlusBridgeVoid::new);
+        return this.getBridge(NoCheatPlusBridge.NAME, NoCheatPlusBridge.class);
     }
 
     public PlayerPointsBridge getPlayerPointsBridge() {
-        return Objects.requireNonNullElseGet(this.playerPointsBridge, PlayerPointsBridgeVoid::new);
+        return this.getBridge(PlayerPointsBridge.NAME, PlayerPointsBridge.class);
     }
 
     public VaultBridge getVaultBridge() {
-        return Objects.requireNonNullElseGet(this.vaultBridge, VaultBridgeVoid::new);
+        return this.vaultBridgeHolder.getBridge();
     }
 
     public VeinMinerBridge getVeinMinerBridge() {
-        return Objects.requireNonNullElseGet(this.veinMinerBridge, VeinMinerBridgeVoid::new);
+        return this.getBridge(VeinMinerBridge.NAME, VeinMinerBridge.class);
     }
 
     public WorldGuardBridge getWorldguardBridge() {
-        return Objects.requireNonNullElseGet(this.worldguardBridge, WorldGuardBridgeVoid::new);
+        return this.worldGuardBridgeHolder.getBridge();
+    }
+
+    private <B> @NotNull B getBridge(@NotNull String name, @NotNull Class<B> clazz) {
+        return clazz.cast(this.bridgeMap.get(name).getBridge());
+    }
+
+    private void loadBridge(@NotNull BridgeHolder<?> holder) {
+        if (holder.loadBridge()) {
+            EnchantsPlus.logger().info("A bridge for {} is loaded.", holder.getName());
+        }
     }
 }

@@ -10,17 +10,16 @@ import wtf.choco.veinminer.tool.VeinMinerToolCategory;
 import wtf.choco.veinminer.tool.VeinMinerToolCategoryHand;
 import wtf.choco.veinminer.util.VMConstants;
 
-public class VeinMinerBridgeImpl implements VeinMinerBridge {
+class VeinMinerBridgeImpl implements VeinMinerBridge {
 
     private final VeinMinerPlugin plugin;
 
-    public VeinMinerBridgeImpl() {
+    VeinMinerBridgeImpl() {
         this.plugin = JavaPlugin.getPlugin(VeinMinerPlugin.class);
     }
 
     @Override
     public boolean isVeinMining(@NotNull Player player) {
-
         ItemStack item = player.getInventory().getItemInMainHand();
         VeinMinerToolCategory category = this.plugin.getToolCategoryRegistry().get(item, cat -> player.hasPermission(VMConstants.PERMISSION_VEINMINE.apply(cat)));
 
