@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
-import net.okocraft.enchantsplus.util.NamespacedKeyManager;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class CustomDataTypes {
+
+    public static final NamespacedKey ID_KEY = new NamespacedKey("enchantsplus", "id");
+    public static final NamespacedKey LEVEL_KEY = new NamespacedKey("enchantsplus", "level");
 
     public static final PersistentDataType<PersistentDataContainer[], EnchantPlusData> ENCHANT_PLUS_DATA = new PersistentDataType<>(){
 
@@ -32,8 +35,8 @@ public class CustomDataTypes {
             PersistentDataContainer enchantPairContainer;
             for (Map.Entry<EnchantPlus, Integer> entry : complex.enchantments.entrySet()) {
                 enchantPairContainer = context.newPersistentDataContainer();
-                enchantPairContainer.set(NamespacedKeyManager.ID_KEY, STRING, entry.getKey().getId());
-                enchantPairContainer.set(NamespacedKeyManager.LEVEL_KEY, INTEGER, entry.getValue());
+                enchantPairContainer.set(ID_KEY, STRING, entry.getKey().getId());
+                enchantPairContainer.set(LEVEL_KEY, INTEGER, entry.getValue());
                 enchantPairContainerList.add(enchantPairContainer);
             }
             return enchantPairContainerList.toArray(PersistentDataContainer[]::new);
@@ -43,8 +46,8 @@ public class CustomDataTypes {
         public EnchantPlusData fromPrimitive(PersistentDataContainer[] primitive, PersistentDataAdapterContext context) {
             Map<EnchantPlus, Integer> enchantments = new HashMap<>();
             for (PersistentDataContainer container : primitive) {
-                EnchantPlus enchant = EnchantPlus.fromId(container.getOrDefault(NamespacedKeyManager.ID_KEY, STRING, "null"));
-                int level = container.getOrDefault(NamespacedKeyManager.LEVEL_KEY, INTEGER, 0);
+                EnchantPlus enchant = EnchantPlus.fromId(container.getOrDefault(ID_KEY, STRING, "null"));
+                int level = container.getOrDefault(LEVEL_KEY, INTEGER, 0);
                 if (enchant == null || level == 0) {
                     continue;
                 }

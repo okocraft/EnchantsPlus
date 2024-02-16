@@ -19,7 +19,6 @@ import net.okocraft.enchantsplus.EnchantsPlus;
 import net.okocraft.enchantsplus.config.Config.EnchantConfig;
 import net.okocraft.enchantsplus.enchant.EnchantAPI;
 import net.okocraft.enchantsplus.enchant.EnchantPlus;
-import net.okocraft.enchantsplus.util.NamespacedKeyManager;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -34,6 +33,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class LocalItemStack {
 
+    private static final NamespacedKey ENCHANTMENTS_KEY = new NamespacedKey("enchantsplus", "enchantments");
+    private static final NamespacedKey LORE_KEY = new NamespacedKey("enchantsplus", "lore");
+    private static final NamespacedKey ENCHANT_LORE_KEY = new NamespacedKey("enchantsplus", "enchant_lore");
+
     private final EnchantsPlus plugin;
 
     private final ItemStack handle;
@@ -47,12 +50,12 @@ public class LocalItemStack {
         ItemMeta meta = handle.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         this.enchantPlusData = container.getOrDefault(
-                NamespacedKeyManager.ENCHANTMENTS_KEY,
+                ENCHANTMENTS_KEY,
                 CustomDataTypes.ENCHANT_PLUS_DATA,
                 new EnchantPlusData(new HashMap<>())
         );
-        if (!container.has(NamespacedKeyManager.LORE_KEY, PersistentDataType.LIST.strings()) ||
-                !container.has(NamespacedKeyManager.ENCHANT_LORE_KEY, PersistentDataType.LIST.strings())) {
+        if (!container.has(LORE_KEY, PersistentDataType.LIST.strings()) ||
+                !container.has(ENCHANT_LORE_KEY, PersistentDataType.LIST.strings())) {
             this.setOriginalLore(meta, handle.lore());
         }
     }
@@ -64,9 +67,9 @@ public class LocalItemStack {
         }
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.remove(NamespacedKeyManager.ENCHANTMENTS_KEY);
-        container.remove(NamespacedKeyManager.LORE_KEY);
-        container.remove(NamespacedKeyManager.ENCHANT_LORE_KEY);
+        container.remove(ENCHANTMENTS_KEY);
+        container.remove(LORE_KEY);
+        container.remove(ENCHANT_LORE_KEY);
         item.setItemMeta(meta);
         return item;
     }
@@ -100,10 +103,10 @@ public class LocalItemStack {
     }
 
     private void setOriginalLore(@NotNull ItemMeta meta, @Nullable List<Component> originalLore) {
-        setLoreData(meta, NamespacedKeyManager.LORE_KEY, toJson(originalLore));
+        setLoreData(meta, LORE_KEY, toJson(originalLore));
 
         List<Component> enchantLore = this.createEnchantLore();
-        setLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY, toJson(enchantLore));
+        setLoreData(meta, ENCHANT_LORE_KEY, toJson(enchantLore));
 
         List<Component> newLore;
 
@@ -120,11 +123,11 @@ public class LocalItemStack {
     }
 
     public int calculateOriginalLoreLines() {
-        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.LORE_KEY).size();
+        return getLoreData(this.getHandledMeta(), LORE_KEY).size();
     }
 
     public int calculateEnchantLoreLines() {
-        return getLoreData(this.getHandledMeta(), NamespacedKeyManager.ENCHANT_LORE_KEY).size();
+        return getLoreData(this.getHandledMeta(), ENCHANT_LORE_KEY).size();
     }
 
     public void fixLore() {
@@ -134,8 +137,8 @@ public class LocalItemStack {
         int enchantLineSize;
 
         {
-            List<String> enchantLoreData = getLoreData(meta, NamespacedKeyManager.ENCHANT_LORE_KEY);
-            List<String> originalLoreData = getLoreData(meta, NamespacedKeyManager.LORE_KEY);
+            List<String> enchantLoreData = getLoreData(meta, ENCHANT_LORE_KEY);
+            List<String> originalLoreData = getLoreData(meta, LORE_KEY);
 
             savedLore = new ArrayList<>(enchantLoreData.size() + originalLoreData.size());
             savedLore.addAll(fromJson(enchantLoreData));
@@ -360,9 +363,9 @@ public class LocalItemStack {
     private void saveEnchantPlusData() {
         ItemMeta meta = getHandledMeta();
         if (enchantPlusData.enchantments.isEmpty()) {
-            meta.getPersistentDataContainer().remove(NamespacedKeyManager.ENCHANTMENTS_KEY);
+            meta.getPersistentDataContainer().remove(ENCHANTMENTS_KEY);
         } else {
-            meta.getPersistentDataContainer().set(NamespacedKeyManager.ENCHANTMENTS_KEY,
+            meta.getPersistentDataContainer().set(ENCHANTMENTS_KEY,
                     CustomDataTypes.ENCHANT_PLUS_DATA, enchantPlusData);
         }
         setItemMeta(meta);
