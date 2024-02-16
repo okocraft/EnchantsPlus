@@ -1,6 +1,7 @@
 package net.okocraft.enchantsplus.bridge;
 
 import net.okocraft.enchantsplus.EnchantsPlus;
+import net.okocraft.enchantsplus.bridge.essentials.EssentialsBridge;
 import net.okocraft.enchantsplus.bridge.nocheatplus.NoCheatPlusBridge;
 import net.okocraft.enchantsplus.bridge.playerpoints.PlayerPointsBridge;
 import net.okocraft.enchantsplus.bridge.vault.VaultBridge;
@@ -26,6 +27,7 @@ public class BridgeManager implements Listener {
 
     // These bridges can be loaded/unloaded while the server is running. Currently, PluginEnableEvent and PluginDisableEvent do so.
     private final Map<String, BridgeHolder<?>> bridgeMap = Map.of(
+            EssentialsBridge.NAME, EssentialsBridge.createHolder(),
             NoCheatPlusBridge.NAME, NoCheatPlusBridge.createHolder(),
             PlayerPointsBridge.NAME, PlayerPointsBridge.createHolder(),
             VeinMinerBridge.NAME, VeinMinerBridge.createHolder()
@@ -56,6 +58,10 @@ public class BridgeManager implements Listener {
 
     public void hookWorldGuardBridge() {
         this.loadBridge(this.worldGuardBridgeHolder);
+    }
+
+    public EssentialsBridge getEssentialsBridge() {
+        return this.getBridge(EssentialsBridge.NAME, EssentialsBridge.class);
     }
 
     public NoCheatPlusBridge getNoCheatPlusBridge() {

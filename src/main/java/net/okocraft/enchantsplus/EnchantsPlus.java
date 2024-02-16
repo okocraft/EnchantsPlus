@@ -79,6 +79,7 @@ public class EnchantsPlus extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
         HandlerList.unregisterAll(this);
         this.mainListener = new MainListener(this);
+        this.bridgeManager.getEssentialsBridge().registerTabCompletionListener(this);
         pluginManager.registerEvents(mainListener, this);
         pluginManager.registerEvents(new NewEnchantListener(this), this);
         pluginManager.registerEvents(new AnvilListener(this), this);
